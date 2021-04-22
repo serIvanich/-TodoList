@@ -1,34 +1,88 @@
-import React from 'react'
+import React, {useState} from 'react'
 import './App.css'
 import {TodoList} from "./TodoList"
+import {v1} from 'uuid'
 
 export type TaskType = {
-    id: number
+    id: string
     title: string
     isDone: boolean
 }
+export type FilterValuesType = 'all'|'active'|'completed'
 
 function App() {
 
-    const tasksToLearn: Array<TaskType> = [
-        {id: 1, title: 'HTML', isDone: true},
-        {id: 2, title: 'CSS', isDone: true},
-        {id: 3, title: 'React', isDone: false},
-    ]
+    //BLL
+    const [tasks, setTask] = useState<Array<TaskType>>([
+        {id: v1(), title: 'HTML', isDone: true},
+        {id: v1(), title: 'CSS', isDone: true},
+        {id: v1(), title: 'React', isDone: false},
+        {id: v1(), title: 'JavaScript', isDone: true},
+    ])
 
-    const tasksToBuy: Array<TaskType> = [
-        {id: 4, title: 'Milk', isDone: true},
-        {id: 5, title: 'Beer', isDone: false},
-        {id: 6, title: 'Water', isDone: false},
-    ]
+    const [filter, setFilter] = useState<FilterValuesType>('active')
 
+
+
+    function removeTask(taskID: string) {
+        const newTasks = tasks.filter(t => t.id !== taskID)
+        console.log(tasks)
+        setTask(newTasks)
+    }
+
+    function addTask(title: string) {
+        const newTask: TaskType = {
+            id: v1(),
+            title: title,
+            isDone: false
+        }
+        setTask([newTask, ...tasks])
+    }
+    function changeTaskStatus(taskID: string, newIsDoneValue: boolean){
+        setTask(tasks.map(t => t.id === taskID ? {...t, isDone: newIsDoneValue} : t))
+    }
+
+    function changeFilter(value: FilterValuesType){
+        setFilter(value)
+
+    }
+
+    //UI
+
+    function  getTasksForTodoList() {
+
+
+        switch (filter){
+
+
+            case 'active':
+                return tasks.filter( t => !t.isDone)
+
+            case 'completed':
+                return tasks.filter( t => t.isDone===true)
+            default:
+                return tasks
+
+
+        }
+    }
+
+    console.log(tasks)
     return (
         <div className="App">
-            <TodoList title={'What to learn'} tasks={tasksToLearn}/>
-            <TodoList title={'What to buy'} tasks={tasksToBuy}/>
+            <TodoList
+                title={'What to learn'}
+                tasks={getTasksForTodoList()}
+                filter={filter}
+                removeTask={removeTask}
+                changeFilter={changeFilter}
+                addTask={addTask}
+                changeTaskStatus={changeTaskStatus}
+            />
 
         </div>
     )
 }
+
 
 export default App

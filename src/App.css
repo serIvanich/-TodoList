@@ -6,3 +6,15 @@
 .App > div {
   margin-right: 50px;
 }
+
+.is-done {
+  opacity: .5;
+}
+
+.active-filter {
+  background-color: lightgreen;
+}
+
+.error {
+  border: 2px solid red;
+}
