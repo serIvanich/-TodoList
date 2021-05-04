@@ -12,7 +12,7 @@ export function EditableSpan(props: EditableSpanPropsType) {
     const [editMode, setEditMode] = useState(false)
     const onEditMode = () => {
         setEditMode(true)
-        setTitle(props.title)
+        // setTitle(props.title)
     }
     const offEditMode = () => {
         setEditMode(false)

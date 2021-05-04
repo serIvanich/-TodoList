@@ -34,7 +34,7 @@ export const TodoList: React.FC<TodoListPropsType> = (props) => {
 
 
         return (
-            <li className={t.isDone ? 'is-done' : ''}>
+            <li className={t.isDone ? 'is-done' : ''} key={t.id}>
                 <input
                     onChange={changeTaskStatus}
                     type='checkbox'
