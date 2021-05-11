@@ -2,6 +2,10 @@ import React, {useState, KeyboardEvent, ChangeEvent} from 'react'
 import {FilterValuesType, TaskType} from './App'
 import AddItemForm from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
+import {Button, Checkbox, IconButton} from "@material-ui/core";
+import {Delete} from "@material-ui/icons";
+
+
 
 
 type TodoListPropsType = {
@@ -34,71 +38,75 @@ export const TodoList: React.FC<TodoListPropsType> = (props) => {
 
 
         return (
-            <li className={t.isDone ? 'is-done' : ''} key={t.id}>
-                <input
-                    onChange={changeTaskStatus}
-                    type='checkbox'
-                    checked={t.isDone}/>
-                {/*<span>{t.title}</span>*/}
+            <li  key={t.id}>
+                <span className={t.isDone ? 'is-done' : ''}>
+                    <Checkbox
+                        color={"primary"}
+                        checked={t.isDone}
+                        onChange={changeTaskStatus}
+                    />
+                </span>
+
+                {/*<input*/}
+                {/*    onChange={changeTaskStatus}*/}
+                {/*    type='checkbox'*/}
+                {/*    checked={t.isDone}/>*/}
+                {/*/!*<span>{t.title}</span>*!/*/}
                 <EditableSpan title={t.title} changeTitle={changeTaskTitle}/>
-                <button onClick={removeTask}>x</button>
+                {/*<button onClick={removeTask}>x</button>*/}
+                <IconButton onClick={removeTask} color={"secondary"}>
+                    <Delete />
+                </IconButton>
             </li>)
     })
-    // const onClickAddTask = () => {
-    //     const trimmerTitle = title.trim()
-    //     if (trimmerTitle) {
-    //         props.addTask(title, props.todoListID)
-    //     } else {
-    //         setError(true)
-    //     }
-    //
-    //     setTitle('')
-    // }
-    // const onKeyPressAddTask = (e: KeyboardEvent<HTMLInputElement>) => {
-    //     if (e.key === 'Enter') {
-    //         onClickAddTask()
-    //     }
-    // }
+
     const onClickTodoList = () => props.removeTodoList(props.todoListID)
-    //   const errorMessage = error ? <div style={{color: 'red'}}>'text is required'</div> : null
-    //    const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    //        setTitle(e.currentTarget.value)
-    //        setError(false)
-    //
-    //    }
+
 
     const addTask = (title: string) => props.addTask(title, props.todoListID)
     const changeTodoListTitle = (title: string) => props.changeTodoListTitle(title, props.todoListID)
 
 
+    // @ts-ignore
     return (
         <div>
             <h3>
                 <EditableSpan title={props.title} changeTitle={changeTodoListTitle}/>
-                <button onClick={onClickTodoList}>x</button>
+                {/*<button onClick={onClickTodoList}>x</button>*/}
+                <IconButton onClick={onClickTodoList} color={"secondary"}>
+                    <Delete />
+                </IconButton>
             </h3>
             <AddItemForm addItem={addTask}/>
-            {/*<div>*/}
-            {/*    <input className={error ? 'error' : ''}*/}
-            {/*           value={title}*/}
-            {/*           onChange={onChangeTitle}*/}
-            {/*           onKeyPress={onKeyPressAddTask}/>*/}
-            {/*    <button onClick={onClickAddTask}>+</button>*/}
-            {/*    {errorMessage}*/}
-            {/*</div>*/}
-            <ul>
+
+            <ul style={{listStyle:"none", paddingLeft: '0px'}}>
                 {tasks}
             </ul>
             <div>
-                <button className={filter === 'all' ? 'active-filter' : ''}
+                <Button
+
+                    size={"small"}
+                    variant={filter === 'all' ? "contained" : "outlined"}
+                    color={'primary'}
+
                         onClick={() => props.changeFilter('all', props.todoListID)}>All
-                </button>
-                <button className={filter === 'active' ? 'active-filter' : ''}
+                </Button>
+                <Button
+                    style={{marginLeft: '3px'}}
+                    size={"small"}
+                    variant={filter === 'active' ? "contained" : "outlined"}
+                    color={'primary'}
+                    // className={filter === 'active' ? 'active-filter' : ''}
                         onClick={() => props.changeFilter('active', props.todoListID)}>Active
-                </button>
-                <button className={filter === 'completed' ? 'active-filter' : ''}
+                </Button>
+                <Button
+                    style={{marginLeft: '3px'}}
+                    size={"small"}
+                    variant={filter === 'completed' ? "contained" : "outlined"}
+                    color={'primary'}
+                    // className={filter === 'completed' ? 'active-filter' : ''}
                         onClick={() => props.changeFilter('completed', props.todoListID)}>Completed
-                </button>
+                </Button>
             </div>
         </div>
 
