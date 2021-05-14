@@ -1,11 +1,10 @@
-import React, {useState, KeyboardEvent, ChangeEvent} from 'react'
+import React, {ChangeEvent} from 'react'
 import {FilterValuesType, TaskType} from './App'
 import AddItemForm from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Button, Checkbox, IconButton} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
-
-
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 
 
 type TodoListPropsType = {
@@ -54,9 +53,10 @@ export const TodoList: React.FC<TodoListPropsType> = (props) => {
                 {/*/!*<span>{t.title}</span>*!/*/}
                 <EditableSpan title={t.title} changeTitle={changeTaskTitle}/>
                 {/*<button onClick={removeTask}>x</button>*/}
-                <IconButton onClick={removeTask} color={"secondary"}>
-                    <Delete />
+                <IconButton onClick={removeTask} style={{color: 'maroon'}}>
+                    <DeleteOutlinedIcon />
                 </IconButton>
+
             </li>)
     })
 
@@ -73,8 +73,8 @@ export const TodoList: React.FC<TodoListPropsType> = (props) => {
             <h3>
                 <EditableSpan title={props.title} changeTitle={changeTodoListTitle}/>
                 {/*<button onClick={onClickTodoList}>x</button>*/}
-                <IconButton onClick={onClickTodoList} color={"secondary"}>
-                    <Delete />
+                <IconButton onClick={onClickTodoList} style={{color: 'maroon'}}>
+                    <DeleteOutlinedIcon />
                 </IconButton>
             </h3>
             <AddItemForm addItem={addTask}/>
