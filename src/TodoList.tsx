@@ -53,7 +53,7 @@ export const TodoList: React.FC<TodoListPropsType> = (props) => {
                 {/*/!*<span>{t.title}</span>*!/*/}
                 <EditableSpan title={t.title} changeTitle={changeTaskTitle}/>
                 {/*<button onClick={removeTask}>x</button>*/}
-                <IconButton onClick={removeTask} style={{color: 'maroon'}}>
+                <IconButton onClick={removeTask} style={{color: 'maroon'}} >
                     <DeleteOutlinedIcon />
                 </IconButton>
 
