@@ -1,6 +1,8 @@
-import {FilterValuesType, TodoListType} from "../App";
+import {FilterValuesType, TasksStateType, TodoListType} from "../App";
 import {v1} from "uuid";
 
+export const todoListID_1 = v1()
+export const todoListID_2 = v1()
 
 export type RemoveTodoListActionType = {
     type: 'REMOVE-TODOLIST'
@@ -22,24 +24,33 @@ type ChangeTodoListFilterActionType = {
     todoListID: string
 }
 
-export type ActionUnionType = RemoveTodoListActionType | AddTodoListActionType | ChangeTodoListTitleActionType | ChangeTodoListFilterActionType
-export const todoListsReducer =
-    (todoLists: Array<TodoListType>,
-    action: ActionUnionType): Array<TodoListType> => {
+
+const initialState = [
+        {id: todoListID_1, title: 'What to learn', filter: 'all'},
+        {id: todoListID_2, title: 'What to buy', filter: 'all'},
+    ] as Array<TodoListType>
+type InitialStateType = typeof  initialState
+
+export type ActionUnionType = RemoveTodoListActionType
+    | AddTodoListActionType
+    | ChangeTodoListTitleActionType
+    | ChangeTodoListFilterActionType
+
+export const todoListsReducer = (state: InitialStateType = initialState, action: ActionUnionType): InitialStateType => {
     switch (action.type) {
         case 'REMOVE-TODOLIST':
-            return todoLists.filter(tl => tl.id !== action.todoListID)
+            return state.filter(tl => tl.id !== action.todoListID)
         case "ADD-TODOLIST":
 
             const newTodoList: TodoListType = {id: action.todolistId, title: action.title, filter: 'all'}
 
-            return [...todoLists, newTodoList]
+            return [...state, newTodoList]
         case 'CHANGE-TODOLIST-TITLE':
-            return todoLists.map(tl => tl.id === action.todoListID ? {...tl, title: action.title} : tl)
+            return state.map(tl => tl.id === action.todoListID ? {...tl, title: action.title} : tl)
         case "CHANGE-TODOLIST-FILTER":
-            return todoLists.map(tl => tl.id === action.todoListID ? {...tl, filter: action.value} : tl)
+            return state.map(tl => tl.id === action.todoListID ? {...tl, filter: action.value} : tl)
         default:
-            return todoLists
+            return state
     }
 }
 
