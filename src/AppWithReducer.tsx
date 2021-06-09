@@ -2,7 +2,7 @@ import React, {useReducer, useState} from 'react'
 import './App.css'
 import {TodoList} from "./TodoList"
 import {v1} from 'uuid'
-import AddItemForm from "./AddItemForm";
+import {AddItemForm} from "./AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
 import {
@@ -132,7 +132,7 @@ function AppWithReducer() {
                 <Paper elevation={7} style={{padding: '20px', borderRadius: '5px'}}>
                     <TodoList
 
-                        todoListID={tl.id}
+                        todolistID={tl.id}
                         title={tl.title}
                         tasks={getTasksForTodoList(tl)}
                         filter={tl.filter}

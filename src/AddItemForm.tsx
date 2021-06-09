@@ -6,63 +6,62 @@ type AddItemFormPropsType = {
     addItem: (title: string) => void
 }
 
-function AddItemForm(props: AddItemFormPropsType) {
+export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
     const [title, setTitle] = useState<string>('')
-    const [error, setError] = useState<boolean>(false)
+    const [error, setError] = useState<string | null>(null)
 
     const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
-        setError(false)
+
     }
     const onClickAddItem = () => {
         const trimmedTitle = title.trim()
         if (trimmedTitle) {
             props.addItem(trimmedTitle)
         } else {
-            setError(true)
+            setError('Title is requeired')
         }
 
         setTitle('')
     }
     const onKeyPressAddItem = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (error !== null) {
+            setError(null)
+        }
+
+
         if (e.key === 'Enter') {
             onClickAddItem()
         }
     }
-    // const errorMessage = error
-    //     ? <div style={{color: 'red'}}>'text is required'</div>
-    //     : null
 
 
-    return (
-        <div>
-            <TextField
-                size={"small"}
-                variant={"outlined"}
-                error={error}
-                value={title}
-                onChange={onChangeTitle}
-                onKeyPress={onKeyPressAddItem}
-                label={'title'}
-                helperText={error && 'title is required'}
-                onBlur={() => setError(false)}
-            />
+
+        return (
+            <div>
+                <TextField
+                    size={"small"}
+                    variant={"outlined"}
+                    error={!!error}
+                    value={title}
+                    onChange={onChangeTitle}
+                    onKeyPress={onKeyPressAddItem}
+                    label={'title'}
+                    helperText={error}
+
+                />
 
 
-            {/*<input className={error ? 'error' : ''}*/}
-            {/*       value={title}*/}
-            {/*       onChange={onChangeTitle}*/}
-            {/*       onKeyPress={onKeyPressAddItem}/>*/}
-            {/*<button onClick={onClickAddItem}>+</button>*/}
-            <IconButton onClick={onClickAddItem} color={"primary"}>
 
-                <AddBox/>
-            </IconButton>
-            {/*{errorMessage}*/}
-        </div>
+                <IconButton onClick={onClickAddItem} color={"primary"}>
 
-    )
-}
+                    <AddBox/>
+                </IconButton>
+
+            </div>
+
+        )
+    }
+)
 
 
-export default AddItemForm
