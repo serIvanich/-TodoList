@@ -14,16 +14,16 @@ export const EditableSpan = React.memo((props: EditableSpanPropsType) => {
     const onEditMode = useCallback(() => {
         setEditMode(true)
         // setTitle(props.title)
-    },[])
+    },[editMode])
     const offEditMode = useCallback(() => {
         setEditMode(false)
         props.changeTitle(title)
-    },[])
+    },[title])
     const onChangeTitle = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
 
 
-    },[])
+    },[title])
 
     return (
         editMode

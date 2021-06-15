@@ -6,7 +6,7 @@ import {Button, IconButton} from "@material-ui/core";
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./state/store";
-import {Task} from "./state/Task";
+import {Task} from "./Task";
 
 
 type TodoListPropsType = {
@@ -29,21 +29,9 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
     let tasksForTodolist = props.tasks
 
 
-        // switch (props.filter) {
-        //
-        //
-        //     case 'active':
-        //         return getTasksForTodoList.filter(t => !t.isDone)
-        //
-        //     case 'completed':
-        //         return getTasksForTodoList.filter(t => t.isDone === true)
-
-
-
-        // }
-        if (props.filter === 'active') {
-            tasksForTodolist.filter(t => !t.isDone)
-        }
+    if (props.filter === 'active') {
+        tasksForTodolist.filter(t => !t.isDone)
+    }
     if (props.filter === "completed") {
         tasksForTodolist = props.tasks.filter(t => t.isDone === true);
     }
@@ -69,11 +57,17 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
             />)
     })
 
-    const onClickTodoList = useCallback(() => props.removeTodoList(props.todolistID),[])
+    const onClickTodoList = useCallback(() => {
+        props.removeTodoList(props.todolistID)
+    }, [props.removeTodoList, props.todolistID])
 
 
-    const addTask = useCallback((title: string) => props.addTask(title, props.todolistID),[])
-    const changeTodoListTitle = useCallback((title: string) => props.changeTodoListTitle(title, props.todolistID),[])
+    const addTask = useCallback((title: string) => {
+        props.addTask(title, props.todolistID)
+    }, [props.addTask, props.todolistID])
+    const changeTodoListTitle = useCallback((title: string) => {
+        props.changeTodoListTitle(title, props.todolistID)
+    }, [props.changeTodoListTitle, props.todolistID])
 
 
     // @ts-ignore

@@ -1,8 +1,8 @@
 import React, {ChangeEvent, useCallback} from 'react'
 import {Checkbox, IconButton} from "@material-ui/core";
-import {EditableSpan} from "../EditableSpan";
+import {EditableSpan} from "./EditableSpan";
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
-import {TaskType} from "../AppWithRedux";
+import {TaskType} from "./AppWithRedux";
 
 type TaskPropsType = {
     task: TaskType
@@ -15,22 +15,22 @@ type TaskPropsType = {
 
 
 export const Task: React.FC<TaskPropsType> = React.memo(({
-                                    task,
-                                    todolistID,
-                                    changeTaskStatus,
-    changeTaskTitle,
-    removeTask,
+                                                             task,
+                                                             todolistID,
+                                                             changeTaskStatus,
+                                                             changeTaskTitle,
+                                                             removeTask,
 
-}) => {
+                                                         }) => {
 
     const onChangeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const newIsDoneValue = e.currentTarget.checked
         changeTaskStatus(task.id, newIsDoneValue, todolistID)
-    },[])
+    }, [task, todolistID])
     const onChangeTaskTitle = useCallback((newTitle: string) => {
         changeTaskTitle(task.id, newTitle, todolistID)
-    },[])
-    const onRemoveTask = useCallback(() => removeTask(task.id, todolistID),[])
+    }, [task, todolistID])
+    const onRemoveTask = useCallback(() => removeTask(task.id, todolistID), [task, todolistID])
 
     return (
         <li key={task.id}>
