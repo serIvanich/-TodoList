@@ -30,7 +30,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
 
 
     if (props.filter === 'active') {
-        tasksForTodolist.filter(t => !t.isDone)
+        tasksForTodolist = props.tasks.filter(t => !t.isDone)
     }
     if (props.filter === "completed") {
         tasksForTodolist = props.tasks.filter(t => t.isDone === true);
@@ -38,15 +38,15 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
 
     const todo = useSelector<AppRootStateType>((state =>
         state.todolists.filter(t => t.id === props.todolistID)[0]))
-
-    const tasks1 = useSelector<AppRootStateType>(state => state.tasks[0])
+    //
+    // const tasks1 = useSelector<AppRootStateType>(state => state.tasks[0])
 
     const dispatch = useDispatch()
 
     const {filter} = props
     // const [title, setTitle] = useState<string>('')
     // const [error, setError] = useState<boolean>(false)
-    const tasks = props.tasks.map(t => {
+    const tasks = tasksForTodolist.map(t => {
 
 
         return (
@@ -65,12 +65,16 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
     const addTask = useCallback((title: string) => {
         props.addTask(title, props.todolistID)
     }, [props.addTask, props.todolistID])
+
     const changeTodoListTitle = useCallback((title: string) => {
         props.changeTodoListTitle(title, props.todolistID)
     }, [props.changeTodoListTitle, props.todolistID])
 
+    const onAllClickHandler = useCallback(() => props.changeFilter('all', props.todolistID),[filter])
+    const onActiveClickHandler = useCallback(() => props.changeFilter('active', props.todolistID), [filter])
+    const onCompletedClickHandler = useCallback(() => props.changeFilter('completed', props.todolistID), [filter])
 
-    // @ts-ignore
+
     return (
         <div>
             <h3>
@@ -92,7 +96,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
                     variant={filter === 'all' ? "contained" : "outlined"}
                     color={'primary'}
 
-                    onClick={() => props.changeFilter('all', props.todolistID)}>All
+                    onClick={onAllClickHandler}>All
                 </Button>
                 <Button
                     style={{marginLeft: '3px'}}
@@ -100,7 +104,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
                     variant={filter === 'active' ? "contained" : "outlined"}
                     color={'primary'}
                     // className={filter === 'active' ? 'active-filter' : ''}
-                    onClick={() => props.changeFilter('active', props.todolistID)}>Active
+                    onClick={onActiveClickHandler}>Active
                 </Button>
                 <Button
                     style={{marginLeft: '3px'}}
@@ -108,7 +112,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
                     variant={filter === 'completed' ? "contained" : "outlined"}
                     color={'primary'}
                     // className={filter === 'completed' ? 'active-filter' : ''}
-                    onClick={() => props.changeFilter('completed', props.todolistID)}>Completed
+                    onClick={onCompletedClickHandler}>Completed
                 </Button>
             </div>
         </div>

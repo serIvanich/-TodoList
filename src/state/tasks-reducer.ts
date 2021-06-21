@@ -63,7 +63,7 @@ export const tasksReducer =
                 }
             case 'ADD_TASKS':
                 const newTask: TaskType = {
-                    id: action.todoListID,
+                    id: v1(),
                     title: action.title,
                     isDone: false
                 }
