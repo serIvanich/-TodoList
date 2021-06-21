@@ -22,7 +22,7 @@ type ChangeTaskStatusActionType = {
 }
 
 type ChangeTaskTitleActionType = {
-    type: 'GHANGE_TASK_TITLE'
+    type: 'CHANGE_TASK_TITLE'
     taskID: string
     newTitle: string
     todoListID: string
@@ -77,7 +77,7 @@ export const tasksReducer =
                         isDone: action.newIsDoneValue
                     } : t)
                 }
-            case "GHANGE_TASK_TITLE":
+            case "CHANGE_TASK_TITLE":
                 return {
                     ...state,
                     [action.todoListID]: state[action.todoListID].map(t => t.id === action.taskID ? {
@@ -115,6 +115,6 @@ export const changeTaskStatusAC = (taskID: string, newIsDoneValue: boolean, todo
 
 export const changeTaskTitleAC = (taskID: string, newTitle: string, todoListID: string): ChangeTaskTitleActionType => {
 
-    return {type: 'GHANGE_TASK_TITLE', taskID, newTitle, todoListID}
+    return {type: 'CHANGE_TASK_TITLE', taskID, newTitle, todoListID}
 }
 
