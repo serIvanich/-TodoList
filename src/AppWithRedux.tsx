@@ -7,33 +7,35 @@ import {Menu} from "@material-ui/icons";
 import {
     AddTodoListAC,
     ChangeTodoListFilterAC,
-    ChangeTodoListTitleAC,
-    RemoveTodoListAC
+    ChangeTodoListTitleAC, FilterValuesType,
+    RemoveTodoListAC, TodolistDomainType
 } from "./state/todolists-reducer";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./state/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./state/store";
+import {TasksStatuses, TasksType} from "./api/todolist-api";
 
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
-export type FilterValuesType = 'all' | 'active' | 'completed'
-export type TodoListType = {
-    id: string
-    title: string
-    filter: FilterValuesType
-}
+
+// export type TaskType = {
+//     id: string
+//     title: string
+//     isDone: boolean
+// }
+
+// export type TodoListType = {
+//     id: string
+//     title: string
+//     filter: FilterValuesType
+// }
 export type TasksStateType = {
-    [key: string]: Array<TaskType>
+    [key: string]: Array<TasksType>
 }
 
 function AppWithRedux() {
     //BLL
 
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
-    const todoLists = useSelector<AppRootStateType, Array<TodoListType>>(state => state.todolists)
+    const todoLists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todoLists)
 
     const dispatch = useDispatch()
 
@@ -51,9 +53,9 @@ function AppWithRedux() {
         dispatch(addTaskAC(title, todoListID))
     },[])
 
-    const changeTaskStatus = useCallback((taskID: string, newIsDoneValue: boolean, todoListID: string) => {
+    const changeTaskStatus = useCallback((taskID: string, newStatus: TasksStatuses, todoListID: string) => {
 
-        dispatch(changeTaskStatusAC(taskID, newIsDoneValue, todoListID))
+        dispatch(changeTaskStatusAC(taskID, newStatus, todoListID))
     },[])
 
     const changeTaskTitle = useCallback((taskID: string, newTitle: string, todoListID: string) => {
@@ -95,7 +97,7 @@ function AppWithRedux() {
                 <Paper elevation={7} style={{padding: '20px', borderRadius: '5px'}}>
                     <TodoList
 
-                        todolistID={tl.id}
+                        todoListId={tl.id}
                         title={tl.title}
                         tasks={allTodolistTask}
                         filter={tl.filter}

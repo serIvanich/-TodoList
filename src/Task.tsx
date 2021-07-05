@@ -2,21 +2,21 @@ import React, {ChangeEvent, useCallback} from 'react'
 import {Checkbox, IconButton} from "@material-ui/core";
 import {EditableSpan} from "./EditableSpan";
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
-import {TaskType} from "./AppWithRedux";
+import {TasksStatuses, TasksType} from "./api/todolist-api";
 
 export type TaskPropsType = {
-    task: TaskType
-    todolistID: string
-    changeTaskStatus: (taskID: string, newIsDoneValue: boolean, todoListID: string) => void
-    changeTaskTitle: (taskID: string, title: string, todoListID: string) => void
-    removeTask: (taskID: string, todoListID: string) => void
+    task: TasksType
+    todoListId: string
+    changeTaskStatus: (taskID: string, newStatus: TasksStatuses, todoListId: string) => void
+    changeTaskTitle: (taskID: string, title: string, todoListId: string) => void
+    removeTask: (taskID: string, todoListId: string) => void
 
 }
 
 
 export const Task: React.FC<TaskPropsType> = React.memo(({
                                                              task,
-                                                             todolistID,
+                                                             todoListId,
                                                              changeTaskStatus,
                                                              changeTaskTitle,
                                                              removeTask,
@@ -24,20 +24,25 @@ export const Task: React.FC<TaskPropsType> = React.memo(({
                                                          }) => {
 
     const onChangeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        const newIsDoneValue = e.currentTarget.checked
-        changeTaskStatus(task.id, newIsDoneValue, todolistID)
-    }, [task, todolistID])
+        let newStatus
+        if (e.currentTarget.checked) {
+            newStatus = TasksStatuses.Completed
+        }else {
+            newStatus = TasksStatuses.New
+        }
+        changeTaskStatus(task.id, newStatus, todoListId)
+    }, [task, todoListId])
     const onChangeTaskTitle = useCallback((newTitle: string) => {
-        changeTaskTitle(task.id, newTitle, todolistID)
-    }, [task, todolistID])
-    const onRemoveTask = useCallback(() => removeTask(task.id, todolistID), [task, todolistID])
+        changeTaskTitle(task.id, newTitle, todoListId)
+    }, [task, todoListId])
+    const onRemoveTask = useCallback(() => removeTask(task.id, todoListId), [task, todoListId])
 
     return (
         <li key={task.id}>
-                <span className={task.isDone ? 'is-done' : ''}>
+                <span className={task.status === TasksStatuses.Completed ? 'is-done' : ''}>
                     <Checkbox
                         color={"primary"}
-                        checked={task.isDone}
+                        checked={task.status === TasksStatuses.Completed}
                         onChange={onChangeTaskStatus}
                     />
                 </span>
