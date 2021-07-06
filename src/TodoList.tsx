@@ -47,7 +47,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(fetchTasksThunk(props.todoListId))
-    })
+    }, [])
     const {filter} = props
     // const [title, setTitle] = useState<string>('')
     // const [error, setError] = useState<boolean>(false)

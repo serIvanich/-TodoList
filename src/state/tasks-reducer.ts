@@ -31,7 +31,7 @@ type ChangeTaskStatusActionType = {
 type ChangeTaskTitleActionType = {
     type: 'CHANGE-TASK-TITLE'
     taskID: string
-    newTitle: string
+    title: string
     todoListID: string
 }
 
@@ -121,7 +121,9 @@ export const tasksReducer =
                 return copyState1
 
             case "CHANGE-TASK-STATUS":
+
                 return {
+
                     ...state,
                     [action.todoListID]: state[action.todoListID].map(t => t.id === action.taskID ? {
                         ...t,
@@ -134,14 +136,14 @@ export const tasksReducer =
                     ...state,
                     [action.todoListID]: state[action.todoListID].map(t => t.id === action.taskID ? {
                         ...t,
-                        title: action.newTitle
+                        title: action.title
                     } : t)
                 }
 
             case "ADD-TODOLIST":
                 return {
                     ...state,
-                    [action.todolistId]: []
+                    [action.todoList.id]: []
                 }
 
             case "REMOVE-TODOLIST":
@@ -167,9 +169,9 @@ export const changeTaskStatusAC = (taskID: string, newStatus: TasksStatuses, tod
     return {type: 'CHANGE-TASK-STATUS', taskID, newStatus, todoListID}
 }
 
-export const changeTaskTitleAC = (taskID: string, newTitle: string, todoListID: string): ChangeTaskTitleActionType => {
+export const changeTaskTitleAC = (taskID: string, title: string, todoListID: string): ChangeTaskTitleActionType => {
 
-    return {type: 'CHANGE-TASK-TITLE', taskID, newTitle, todoListID}
+    return {type: 'CHANGE-TASK-TITLE', taskID, title, todoListID}
 }
 
 
@@ -194,14 +196,14 @@ export const fetchTasksThunk = (todoId: string) => (dispatch: Dispatch) => {
 export const removeTaskThunk = (taskID: string, todolistId: string) => (dispatch: Dispatch) => {
     tasksApi.deleteTask(todolistId, taskID)
         .then(data => {
-            dispatch(removeTaskAC(taskID,todolistId))
+            dispatch(removeTaskAC(taskID, todolistId))
         })
 }
 
 export const addTaskThunk = (todoId: string, title: string) => (dispatch: Dispatch) => {
     tasksApi.createTask(todoId, title)
         .then(data => {
-            debugger
+
             if (data.resultCode === 0) {
                 const task = data.data.item
                 dispatch(addTaskAC(task))
@@ -209,7 +211,7 @@ export const addTaskThunk = (todoId: string, title: string) => (dispatch: Dispat
         })
 }
 
-export const updateTaskStatusThunk = (todoId: string, taskId: string, status: TasksStatuses) => (
+export const updateTaskThunk = (todoId: string, taskId: string, status?: TasksStatuses, title?: string) => (
     dispatch: Dispatch, getState: () => AppRootStateType) => {
 
     const state = getState()
@@ -219,10 +221,10 @@ export const updateTaskStatusThunk = (todoId: string, taskId: string, status: Ta
     const clickedTask = allTasksForClickedTodo.find((t) => t.id === taskId)
 
     // const model: any = {...clickedTask, status}
-    if(clickedTask) {
+    if (clickedTask) {
         const model: UpdateTaskModelType = {
-            title: clickedTask.title,
-            status: status,
+            title: title ? title : clickedTask.title,
+            status: (status !== undefined) ? status : clickedTask.status,
             description: clickedTask.description,
             deadline: clickedTask.deadline,
             priority: clickedTask.priority,
@@ -232,9 +234,10 @@ export const updateTaskStatusThunk = (todoId: string, taskId: string, status: Ta
 
         tasksApi.updateTask(todoId, taskId, model)
             .then(data => {
-
-
-                dispatch(changeTaskStatusAC(taskId, status, todoId))
+                if (data.resultCode === 0) {
+                    (status === TasksStatuses.New || status === TasksStatuses.Completed) && dispatch(changeTaskStatusAC(taskId, status, todoId))
+                    title && dispatch(changeTaskTitleAC(taskId, title, todoId))
+                }
             })
     }
 }

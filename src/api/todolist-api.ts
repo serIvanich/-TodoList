@@ -36,6 +36,7 @@ export const todolistApi = {
     },
     updateTodo(todoId: string, title: string) {
         return instance.put<ResponseType>(`todo-lists/${todoId}`, {title})
+            .then(res => res.data)
     }
 }
 
