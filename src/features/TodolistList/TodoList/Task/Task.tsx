@@ -1,8 +1,8 @@
 import React, {ChangeEvent, useCallback} from 'react'
 import {Checkbox, IconButton} from "@material-ui/core";
-import {EditableSpan} from "./EditableSpan";
+import {EditableSpan} from "../../../../components/EditableSpan/EditableSpan";
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
-import {TasksStatuses, TasksType} from "./api/todolist-api";
+import {TasksStatuses, TasksType} from "../../../../api/todolist-api";
 
 export type TaskPropsType = {
     task: TasksType
@@ -14,7 +14,7 @@ export type TaskPropsType = {
 }
 
 
-export const Task: React.FC<TaskPropsType> = React.memo(({
+ const Task: React.FC<TaskPropsType> = React.memo(({
                                                              task,
                                                              todoListId,
                                                              changeTaskStatus,
@@ -24,9 +24,7 @@ export const Task: React.FC<TaskPropsType> = React.memo(({
                                                          }) => {
 
     const onChangeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-
         const newStatus = e.currentTarget.checked ? TasksStatuses.Completed : TasksStatuses.New
-
         changeTaskStatus(task.id, newStatus, todoListId)
     }, [task, todoListId])
 
@@ -44,14 +42,7 @@ export const Task: React.FC<TaskPropsType> = React.memo(({
                         onChange={onChangeTaskStatus}
                     />
                 </span>
-
-            {/*<input*/}
-            {/*    onChange={changeTaskStatus}*/}
-            {/*    type='checkbox'*/}
-            {/*    checked={t.isDone}/>*/}
-            {/*/!*<span>{t.title}</span>*!/*/}
             <EditableSpan title={task.title} changeTitle={onChangeTaskTitle}/>
-            {/*<button onClick={removeTask}>x</button>*/}
             <IconButton onClick={onRemoveTask} style={{color: 'maroon'}}>
                 <DeleteOutlinedIcon/>
             </IconButton>
@@ -59,3 +50,5 @@ export const Task: React.FC<TaskPropsType> = React.memo(({
         </li>)
 
 })
+
+export default Task

@@ -1,12 +1,12 @@
 import React from 'react';
 import {Meta, Story} from '@storybook/react';
-import {AddItemForm, AddItemFormPropsType} from '../AddItemForm';
 import {action} from "@storybook/addon-actions";
-import {Task, TaskPropsType} from "../Task";
-import {TaskPriorities, TasksStatuses} from "../api/todolist-api";
+
+import {TaskPriorities, TasksStatuses} from "../../../../api/todolist-api";
+import Task,{TaskPropsType} from "./Task";
 
 export default {
-  title: 'Todolist/Task',
+  title: 'TodoList/Task',
   component: Task,
 } as Meta;
 

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 
-import { Button, ButtonProps } from './Button';
-import { AddItemForm, AddItemFormPropsType } from '../AddItemForm';
+import { Button, ButtonProps } from '../../stories/Button';
+import { AddItemForm, AddItemFormPropsType } from './AddItemForm';
 import {action} from "@storybook/addon-actions";
 
 export default {
-  title: 'Todolist/AddItemForm',
+  title: 'TodoList/AddItemForm',
   component: AddItemForm,
   argTypes: {
     onClick: {

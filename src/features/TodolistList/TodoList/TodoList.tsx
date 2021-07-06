@@ -1,15 +1,16 @@
 import React, {useCallback, useEffect} from 'react'
 
-import {AddItemForm} from "./AddItemForm";
-import {EditableSpan} from "./EditableSpan";
+import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
+import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import {Button, IconButton} from "@material-ui/core";
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "./state/store";
-import {Task} from "./Task";
-import {TasksStatuses, TasksType} from "./api/todolist-api";
-import {FilterValuesType} from "./state/todolists-reducer";
-import {fetchTasksThunk} from "./state/tasks-reducer";
+import {AppRootStateType} from "../../../app/store";
+
+import {TasksStatuses, TasksType} from "../../../api/todolist-api";
+import {FilterValuesType} from "../todolists-reducer";
+import {fetchTasksThunk} from "../tasks-reducer";
+import Task from "./Task/Task";
 
 
 type TodoListPropsType = {
@@ -30,8 +31,6 @@ type TodoListPropsType = {
 export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
 
     let tasksForTodolist = props.tasks
-
-
     if (props.filter === 'active') {
         tasksForTodolist = props.tasks.filter(t => t.status === TasksStatuses.New)
     }
@@ -41,16 +40,13 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
 
     const todo = useSelector<AppRootStateType>((state =>
         state.todoLists.filter(t => t.id === props.todoListId)[0]))
-    //
-    // const tasks1 = useSelector<AppRootStateType>(state => state.tasks[0])
 
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(fetchTasksThunk(props.todoListId))
     }, [])
     const {filter} = props
-    // const [title, setTitle] = useState<string>('')
-    // const [error, setError] = useState<boolean>(false)
+
     const tasks = tasksForTodolist.map(t => {
 
 
@@ -85,7 +81,6 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
         <div>
             <h3>
                 <EditableSpan title={props.title} changeTitle={changeTodoListTitle}/>
-                {/*<button onClick={onClickTodoList}>x</button>*/}
                 <IconButton onClick={onClickTodoList} style={{color: 'maroon'}}>
                     <DeleteOutlinedIcon/>
                 </IconButton>
@@ -109,7 +104,6 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
                     size={"small"}
                     variant={filter === 'active' ? "contained" : "outlined"}
                     color={'primary'}
-                    // className={filter === 'active' ? 'active-filter' : ''}
                     onClick={onActiveClickHandler}>Active
                 </Button>
                 <Button
@@ -117,7 +111,6 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
                     size={"small"}
                     variant={filter === 'completed' ? "contained" : "outlined"}
                     color={'primary'}
-                    // className={filter === 'completed' ? 'active-filter' : ''}
                     onClick={onCompletedClickHandler}>Completed
                 </Button>
             </div>

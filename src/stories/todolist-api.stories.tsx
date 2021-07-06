@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react'
 import {todolistApi} from "../api/todolist-api";
 
 export default {
-    title: 'API/Todolist'
+    title: 'API/TodoList'
 }
 
 

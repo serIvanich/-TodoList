@@ -1,13 +1,13 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 
-import { Button, ButtonProps } from './Button';
-import { AddItemForm, AddItemFormPropsType } from '../AddItemForm';
+import { Button, ButtonProps } from '../../stories/Button';
+import { AddItemForm, AddItemFormPropsType } from '../AddItemForm/AddItemForm';
 import {action} from "@storybook/addon-actions";
-import { EditableSpan, EditableSpanPropsType } from '../EditableSpan';
+import { EditableSpan, EditableSpanPropsType } from './EditableSpan';
 
 export default {
-  title: 'Todolist/EditableSpan',
+  title: 'TodoList/EditableSpan',
   component: EditableSpan,
   argTypes: {
     onChange: {
