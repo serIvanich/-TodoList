@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react'
+import React, {useCallback, useEffect} from 'react'
 
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
@@ -9,6 +9,7 @@ import {AppRootStateType} from "./state/store";
 import {Task} from "./Task";
 import {TasksStatuses, TasksType} from "./api/todolist-api";
 import {FilterValuesType} from "./state/todolists-reducer";
+import {fetchTasksThunk} from "./state/tasks-reducer";
 
 
 type TodoListPropsType = {
@@ -44,7 +45,9 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
     // const tasks1 = useSelector<AppRootStateType>(state => state.tasks[0])
 
     const dispatch = useDispatch()
-
+    useEffect(() => {
+        dispatch(fetchTasksThunk(props.todoListId))
+    })
     const {filter} = props
     // const [title, setTitle] = useState<string>('')
     // const [error, setError] = useState<boolean>(false)
@@ -61,7 +64,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
 
     const onClickTodoList = useCallback(() => {
         props.removeTodoList(props.todoListId)
-        
+
     }, [props.removeTodoList, props.todoListId])
 
 
@@ -73,7 +76,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo((props) => {
         props.changeTodoListTitle(title, props.todoListId)
     }, [props.changeTodoListTitle, props.todoListId])
 
-    const onAllClickHandler = useCallback(() => props.changeFilter('all', props.todoListId),[filter])
+    const onAllClickHandler = useCallback(() => props.changeFilter('all', props.todoListId), [filter])
     const onActiveClickHandler = useCallback(() => props.changeFilter('active', props.todoListId), [filter])
     const onCompletedClickHandler = useCallback(() => props.changeFilter('completed', props.todoListId), [filter])
 
