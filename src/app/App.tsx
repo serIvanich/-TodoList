@@ -26,7 +26,7 @@ function App() {
                 </Toolbar>
             </AppBar>
             <Container fixed>
-                <TodolistList />
+                <TodolistList/>
             </Container>
         </div>
     )

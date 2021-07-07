@@ -14,14 +14,14 @@ export type TaskPropsType = {
 }
 
 
- const Task: React.FC<TaskPropsType> = React.memo(({
-                                                             task,
-                                                             todoListId,
-                                                             changeTaskStatus,
-                                                             changeTaskTitle,
-                                                             removeTask,
+const Task: React.FC<TaskPropsType> = React.memo(({
+                                                      task,
+                                                      todoListId,
+                                                      changeTaskStatus,
+                                                      changeTaskTitle,
+                                                      removeTask,
 
-                                                         }) => {
+                                                  }) => {
 
     const onChangeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const newStatus = e.currentTarget.checked ? TasksStatuses.Completed : TasksStatuses.New

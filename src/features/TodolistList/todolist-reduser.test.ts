@@ -1,6 +1,5 @@
-
 import {
-    ActionUnionType,
+    TodoListActionType,
     addTodoListAC,
     removeTodoListAC,
     todoListsReducer,
@@ -28,7 +27,7 @@ beforeEach(() => {
 
 test('correct todolist should be removed', () => {
 
-    const endState = todoListsReducer(startState, removeTodoListAC(todoListID_1) )
+    const endState = todoListsReducer(startState, removeTodoListAC(todoListID_1))
 
     expect(endState.length).toBe(1)
     expect(endState[0].id).toBe(todoListID_2)
@@ -47,14 +46,6 @@ test('correct todolist should be added', () => {
 test('correct todolist should change its name', () => {
 
     let newTodolistTitle = "New TodoList";
-
-
-    // const action: ActionUnionType = {
-    //     type: 'CHANGE-TODOLIST-TITLE',
-    //     todoListID: todolistId2,
-    //     title: newTodolistTitle
-    //
-    // };
     const endState = todoListsReducer(startState, changeTodoListTitleAC(todoListID_2, newTodolistTitle));
 
     expect(endState[0].title).toBe("one todolist");
@@ -64,14 +55,6 @@ test('correct todolist should change its name', () => {
 test('correct filter of todolist should be changed', () => {
 
     let newFilter: FilterValuesType = "completed";
-
-
-    // const action: ActionUnionType = {
-    //     type: 'CHANGE-TODOLIST-FILTER',
-    //     todoListID: todolistId2,
-    //     value: newFilter
-    // };
-
     const endState = todoListsReducer(startState, changeTodoListFilterAC(newFilter, todoListID_2));
 
     expect(endState[0].filter).toBe("all");

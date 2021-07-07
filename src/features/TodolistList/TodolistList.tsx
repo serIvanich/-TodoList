@@ -16,7 +16,7 @@ import {addTaskThunk, removeTaskThunk, TasksStateType, updateTaskThunk} from "./
 import {useDispatch, useSelector} from "react-redux";
 import {TasksStatuses} from "../../api/todolist-api";
 import {AppRootStateType} from "../../app/store";
-import { TodoList } from './TodoList/TodoList';
+import {TodoList} from './TodoList/TodoList';
 
 export const TodolistList: React.FC = () => {
 

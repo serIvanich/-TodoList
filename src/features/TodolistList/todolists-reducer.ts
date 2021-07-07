@@ -1,6 +1,6 @@
 import {v1} from "uuid";
 import {todolistApi, TodolistType} from "../../api/todolist-api";
-import {Dispatch} from "redux";
+import {AppThunkType} from "../../app/store";
 
 export const todoListID_1 = v1()
 export const todoListID_2 = v1()
@@ -10,7 +10,7 @@ const initialState = [
     {id: todoListID_2, title: 'What to buy', filter: 'all', addedDate: '', order: 0},
 ] as Array<TodolistDomainType>
 
-export const todoListsReducer = (state: InitialStateType = initialState, action: ActionUnionType): InitialStateType => {
+export const todoListsReducer = (state: InitialStateType = initialState, action: TodoListActionType): InitialStateType => {
     switch (action.type) {
 
         case "SET-TODOLISTS":
@@ -20,7 +20,7 @@ export const todoListsReducer = (state: InitialStateType = initialState, action:
             return state.filter(tl => tl.id !== action.todoListID)
 
         case "ADD-TODOLIST":
-            return [{...action.todoList,filter: 'all'}, ...state]
+            return [{...action.todoList, filter: 'all'}, ...state]
 
         case 'CHANGE-TODOLIST-TITLE':
             return state.map(tl => tl.id === action.todoListID ? {...tl, title: action.title} : tl)
@@ -45,40 +45,51 @@ export const addTodoListAC = (todoList: TodolistType) =>
 export const changeTodoListTitleAC = (todoListID: string, title: string) =>
     ({type: 'CHANGE-TODOLIST-TITLE', title, todoListID} as const)
 export const changeTodoListFilterAC = (value: FilterValuesType, todoListID: string) =>
-    ({type: 'CHANGE-TODOLIST-FILTER', value, todoListID
-} as const)
+    ({
+        type: 'CHANGE-TODOLIST-FILTER', value, todoListID
+    } as const)
 
 // thunks
 
-export const fetchTodolistThunk = () => (dispatch: Dispatch) => {
-    todolistApi.getTodo()
-        .then(data => {
-            dispatch(setTodosAC(data))
-        })
+export const fetchTodolistThunk = (): AppThunkType => async dispatch => {
+    try {
+        const data = await todolistApi.getTodo()
+        dispatch(setTodosAC(data))
+    } catch (e) {
+        throw new Error(e)
+    }
+
 }
-export const addTodoListThunk = (title: string) => (dispatch: Dispatch) => {
-    todolistApi.createTodo(title)
-        .then(data => {
-            if (data.resultCode === 0) {
-                dispatch(addTodoListAC(data.data.item))
-            }
-        })
+export const addTodoListThunk = (title: string): AppThunkType => async dispatch => {
+    try {
+        const data = await todolistApi.createTodo(title)
+        if (data.resultCode === 0) {
+            dispatch(addTodoListAC(data.data.item))
+        }
+    } catch (e) {
+        throw new Error(e)
+    }
+
 }
-export const removeTodoListThunk = (todoId: string) => (dispatch: Dispatch) => {
-    todolistApi.deleteTodo(todoId)
-        .then(data => {
-            if (data.resultCode === 0) {
-                dispatch(removeTodoListAC(todoId))
-            }
-        })
+export const removeTodoListThunk = (todoId: string): AppThunkType => async dispatch => {
+    try {
+        const data = await todolistApi.deleteTodo(todoId)
+        if (data.resultCode === 0) {
+            dispatch(removeTodoListAC(todoId))
+        }
+    } catch (e) {
+        throw new Error(e)
+    }
 }
-export const updateTodoListThunk = (todoId: string, title: string) => (dispatch: Dispatch) => {
-    todolistApi.updateTodo(todoId, title)
-        .then(data => {
-            if (data.resultCode === 0) {
-                dispatch(changeTodoListTitleAC(todoId, title))
-            }
-        })
+export const updateTodoListThunk = (todoId: string, title: string): AppThunkType => async dispatch => {
+    try {
+        const data = await todolistApi.updateTodo(todoId, title)
+        if (data.resultCode === 0) {
+            dispatch(changeTodoListTitleAC(todoId, title))
+        }
+    } catch (e) {
+        throw new Error(e)
+    }
 }
 
 // type
@@ -91,7 +102,7 @@ export type AddTodoListActionType = ReturnType<typeof addTodoListAC>
 export type FilterValuesType = 'all' | 'active' | 'completed'
 export type TodolistDomainType = TodolistType & { filter: FilterValuesType }
 
-export type ActionUnionType =
+export type TodoListActionType =
     RemoveTodoListActionType
     | AddTodoListActionType
     | ReturnType<typeof changeTodoListTitleAC>

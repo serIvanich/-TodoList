@@ -1,4 +1,3 @@
-
 import React, {useEffect, useState} from 'react'
 import {todolistApi} from "../api/todolist-api";
 
@@ -23,7 +22,7 @@ export const CreateTodolist = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
         const title = 'new Todo3'
-            todolistApi.createTodo(title)
+        todolistApi.createTodo(title)
 
             .then(setState)
     }, [])
