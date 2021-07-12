@@ -7,7 +7,11 @@ import {
     todoListID_2
 } from "./todolists-reducer";
 import {TaskPriorities, tasksApi, TasksStatuses, TasksType} from "../../api/todolist-api";
-import {AppRootStateType, AppThunkType} from "../../app/store";
+import {AppRootActionType, AppRootStateType, AppThunkType} from "../../app/store";
+import {Dispatch} from "redux";
+import {log} from "util";
+import {setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 
 const initialState = {
     [todoListID_1]: [
@@ -57,6 +61,7 @@ export const tasksReducer =
         switch (action.type) {
 
             case "SET-TASKS":
+
                 return {...state, [action.todoId]: [...action.tasks]}
 
             case "SET-TODOLISTS": {
@@ -113,13 +118,17 @@ const fetchTaskAC = (todoId: string, tasks: TasksType[]) =>
     ({type: 'SET-TASKS', todoId, tasks} as const)
 
 // thunk
-export const fetchTasksThunk = (todoId: string): AppThunkType => async dispatch => {
-    try {
-        const data = await tasksApi.getTasks(todoId)
-        dispatch(fetchTaskAC(todoId, data.items))
-    } catch (e) {
-        throw new Error(e)
-    }
+export const fetchTasksThunk = (todoId: string): AppThunkType => (dispatch: Dispatch<AppRootActionType>) => {
+
+
+    tasksApi.getTasks(todoId)
+        .then(data => {
+            dispatch(fetchTaskAC(todoId, data.items))
+        })
+
+        .catch(e => {
+            console.log(e)
+        })
 }
 export const removeTaskThunk = (taskID: string, todolistId: string): AppThunkType => async dispatch => {
     try {
@@ -131,13 +140,17 @@ export const removeTaskThunk = (taskID: string, todolistId: string): AppThunkTyp
 }
 export const addTaskThunk = (todoId: string, title: string): AppThunkType => async dispatch => {
     try {
+        dispatch(setAppStatusAC('loading'))
         const data = await tasksApi.createTask(todoId, title)
         if (data.resultCode === 0) {
             const task = data.data.item
             dispatch(addTaskAC(task))
+            dispatch(setAppStatusAC('succeeded'))
+        } else {
+            handleServerAppError(data, dispatch)
         }
     } catch (e) {
-        throw new Error(e)
+        handleServerNetworkError(e, dispatch)
     }
 }
 export const updateTaskThunk = (todoId: string, taskId: string, model: UpdateDomainTaskModelType): AppThunkType =>

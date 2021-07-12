@@ -6,16 +6,18 @@ import {tasksReducer} from "../../features/TodolistList/tasks-reducer";
 import {todoListsReducer} from "../../features/TodolistList/todolists-reducer";
 import {v1} from "uuid";
 import {TaskPriorities, TasksStatuses} from "../../api/todolist-api";
+import {appReducer} from "../../app/app-reducer";
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
-    todoLists: todoListsReducer
+    todoLists: todoListsReducer,
+    app: appReducer
 })
 
 const initialGlobalState = {
     todoLists: [
-        {id: "todolistId1", title: "What to learn", filter: "all", addedDate: '', order: 0},
-        {id: "todolistId2", title: "What to buy", filter: "all", addedDate: '', order: 0}
+        {id: "todolistId1", title: "What to learn", filter: "all", entityStatus: 'idle', addedDate: '', order: 0},
+        {id: "todolistId2", title: "What to buy", filter: "all", entityStatus: 'idle', addedDate: '', order: 0}
     ] ,
     tasks: {
         ["todolistId1"]: [
@@ -34,6 +36,10 @@ const initialGlobalState = {
                 priority: TaskPriorities.Hi, startDate: '', deadline: '', todoListId: 'todolistId2',
                 order: 0, addedDate: ''}
         ]
+    },
+    app: {
+        status: 'loading',
+        error: null
     }
 };
 
