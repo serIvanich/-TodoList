@@ -43,7 +43,7 @@ const Task: React.FC<TaskPropsType> = React.memo(({
                     />
                 </span>
             <EditableSpan title={task.title} changeTitle={onChangeTaskTitle}/>
-            <IconButton onClick={onRemoveTask} style={{color: 'maroon'}}>
+            <IconButton onClick={onRemoveTask} style={{color: 'maroon'}} disabled={false}>
                 <DeleteOutlinedIcon/>
             </IconButton>
 

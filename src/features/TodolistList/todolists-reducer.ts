@@ -3,13 +3,14 @@ import {todolistApi, TodolistType} from "../../api/todolist-api";
 import {AppRootActionType, AppThunkType} from "../../app/store";
 import {RequestStatusType, setAppErrorAC, setAppStatusAC, SetAppStatusActionType} from "../../app/app-reducer";
 import {Dispatch} from "redux";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 
 export const todoListID_1 = v1()
 export const todoListID_2 = v1()
 
 const initialState = [
-    {id: todoListID_1, title: 'What to learn', filter: 'all', addedDate: '', order: 0},
-    {id: todoListID_2, title: 'What to buy', filter: 'all', addedDate: '', order: 0},
+    // {id: todoListID_1, title: 'What to learn', filter: 'all', addedDate: '', order: 0},
+    // {id: todoListID_2, title: 'What to buy', filter: 'all', addedDate: '', order: 0},
 ] as Array<TodolistDomainType>
 
 export const todoListsReducer = (state: InitialStateType = initialState, action: TodoListActionType): InitialStateType => {
@@ -71,7 +72,7 @@ export const fetchTodolistThunk = (): AppThunkType => (dispatch: Dispatch<AppRoo
 
 
         .catch(e => {
-            throw new Error(e)
+            handleServerNetworkError(e.message, dispatch)
         })
         .finally(() => {
             dispatch(setAppStatusAC('succeeded'))
@@ -93,20 +94,24 @@ export const addTodoListThunk = (title: string): AppThunkType => async dispatch 
             dispatch(setAppStatusAC('failed'))
         }
     } catch (e) {
-        dispatch(setAppErrorAC(e))
+        handleServerNetworkError(e.message, dispatch)
     }
 
 }
 export const removeTodoListThunk = (todoId: string): AppThunkType => async dispatch => {
     try {
+        dispatch(setAppStatusAC('loading'))
         dispatch(changeTodoListEntityStatusAC(todoId, 'loading'))
         const data = await todolistApi.deleteTodo(todoId)
         if (data.resultCode === 0) {
             dispatch(removeTodoListAC(todoId))
-            dispatch(changeTodoListEntityStatusAC(todoId, 'idle'))
+            dispatch(setAppStatusAC('succeeded'))
+
+        } else {
+            handleServerAppError(data, dispatch)
         }
     } catch (e) {
-        dispatch(setAppErrorAC(e))
+        handleServerNetworkError(e.message, dispatch)
     }
 }
 export const updateTodoListThunk = (todoId: string, title: string): AppThunkType => async dispatch => {
@@ -116,7 +121,7 @@ export const updateTodoListThunk = (todoId: string, title: string): AppThunkType
             dispatch(changeTodoListTitleAC(todoId, title))
         }
     } catch (e) {
-        throw new Error(e)
+        handleServerNetworkError(e.message, dispatch)
     }
 }
 

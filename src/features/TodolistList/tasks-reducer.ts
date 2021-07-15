@@ -127,15 +127,17 @@ export const fetchTasksThunk = (todoId: string): AppThunkType => (dispatch: Disp
         })
 
         .catch(e => {
-            console.log(e)
+            handleServerNetworkError(e.message, dispatch)
         })
 }
 export const removeTaskThunk = (taskID: string, todolistId: string): AppThunkType => async dispatch => {
     try {
+        dispatch(setAppStatusAC('loading'))
         const data = await tasksApi.deleteTask(todolistId, taskID)
         dispatch(removeTaskAC(taskID, todolistId))
+        dispatch(setAppStatusAC('succeeded'))
     } catch (e) {
-        throw new Error(e)
+        handleServerNetworkError(e, dispatch)
     }
 }
 export const addTaskThunk = (todoId: string, title: string): AppThunkType => async dispatch => {
@@ -147,10 +149,12 @@ export const addTaskThunk = (todoId: string, title: string): AppThunkType => asy
             dispatch(addTaskAC(task))
             dispatch(setAppStatusAC('succeeded'))
         } else {
+
             handleServerAppError(data, dispatch)
         }
     } catch (e) {
-        handleServerNetworkError(e, dispatch)
+
+        handleServerNetworkError(e.message, dispatch)
     }
 }
 export const updateTaskThunk = (todoId: string, taskId: string, model: UpdateDomainTaskModelType): AppThunkType =>
@@ -174,9 +178,11 @@ export const updateTaskThunk = (todoId: string, taskId: string, model: UpdateDom
             const data = await tasksApi.updateTask(todoId, taskId, domainModel)
             if (data.resultCode === 0) {
                 dispatch(updateTaskAC(todoId, taskId, model))
+            } else {
+                handleServerAppError(data, dispatch)
             }
         } catch (e) {
-            throw new Error(e)
+            handleServerNetworkError(e.message, dispatch)
         }
     }
 

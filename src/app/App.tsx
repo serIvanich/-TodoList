@@ -9,9 +9,12 @@ import {AppRootStateType} from "./store";
 import {RequestStatusType} from "./app-reducer";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 
+type PropsType = {
+    demo?: boolean
+}
 
-function App() {
-const status = useSelector((state: AppRootStateType): RequestStatusType => state.app.status)
+const App: React.FC<PropsType> = ({demo = false}) => {
+    const status = useSelector((state: AppRootStateType): RequestStatusType => state.app.status)
 // const error = useSelector((state: AppRootStateType): string | null => state.app.error)
 
     return (
@@ -32,10 +35,10 @@ const status = useSelector((state: AppRootStateType): RequestStatusType => state
                         Login
                     </Button>
                 </Toolbar>
-                {status === "loading" && <LinearProgress color="secondary" />}
+                {status === "loading" && <LinearProgress color="secondary"/>}
             </AppBar>
             <Container fixed>
-                <TodolistList/>
+                <TodolistList demo={demo}/>
             </Container>
         </div>
     )
