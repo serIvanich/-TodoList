@@ -17,6 +17,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {TasksStatuses} from "../../api/todolist-api";
 import {AppRootStateType} from "../../app/store";
 import {TodoList} from './TodoList/TodoList';
+import {Redirect} from "react-router-dom";
 
 type PropsType = {
     demo?: boolean
@@ -26,11 +27,12 @@ export const TodolistList: React.FC<PropsType> = ({demo = false}) => {
 
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
     const todoLists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todoLists)
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state  => state.auth.isLoggedIn)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (demo) {
+        if (demo || !isLoggedIn) {
             return;
         }
         dispatch(fetchTodolistThunk())
@@ -103,6 +105,11 @@ export const TodolistList: React.FC<PropsType> = ({demo = false}) => {
             </Grid>
         )
     })
+
+    if (!isLoggedIn) {
+        return <Redirect to={'/login'} />
+    }
+
     return <>
         <Grid container style={{padding: '20px 0'}}>
             <AddItemForm addItem={addTodoList}/>

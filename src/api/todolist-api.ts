@@ -1,4 +1,5 @@
 import axios from "axios"
+import {log} from "util";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -79,12 +80,12 @@ type GetTasksResponseType = {
 
 }
 export type UpdateTaskModelType = {
-    title: string
-    description: string
-    status: TasksStatuses
-    priority: number
-    startDate: string
-    deadline: string
+    title?: string
+    description?: string
+    status?: TasksStatuses
+    priority?: number
+    startDate?: string
+    deadline?: string
 }
 export const tasksApi = {
     getTasks(todoId: string) {
@@ -99,9 +100,26 @@ export const tasksApi = {
         return instance.delete<ResponseType>(`/todo-lists/${todoId}/tasks/${taskId}`)
             .then(res => res.data)
     },
-    updateTask(todoId: string, taskId: string, payload: any) {
+    updateTask(todoId: string, taskId: string, payload: UpdateTaskModelType) {
         return instance.put<ResponseType<TasksType>>(
             `/todo-lists/${todoId}/tasks/${taskId}`, {...payload})
             .then(res => res.data)
     }
+}
+
+
+
+export const authApi = {
+    login(data: LoginRequestType) {
+        return instance.post<ResponseType<{userId: number}>>(
+            '/auth/login', data)
+            .then(res => res.data)
+    }
+}
+
+export type LoginRequestType = {
+    email: string
+    password: string
+    rememberMe: boolean
+    captcha?: string
 }
