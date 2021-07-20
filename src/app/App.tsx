@@ -1,26 +1,45 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import './App.css'
-import {AppBar, Button, Container, IconButton, Toolbar, Typography} from "@material-ui/core";
+import {AppBar, Button, CircularProgress, Container, IconButton, Toolbar, Typography} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
 import {TodolistList} from "../features/TodolistList/TodolistList";
 import LinearProgress from '@material-ui/core/LinearProgress/LinearProgress';
-import {connect, useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
-import {RequestStatusType} from "./app-reducer";
+import {initializeAppTC, RequestStatusType} from "./app-reducer";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {Login} from "../features/Login/Login";
-import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
+import {Redirect, Route, Switch} from 'react-router-dom';
+import {logoutTC} from "../features/Login/auth-reduser";
 
 type PropsType = {
     demo?: boolean
 }
 
-const App: React.FC<PropsType> = ({demo = false}) => {
+export const App: React.FC<PropsType> = ({demo = false}) => {
     const status = useSelector((state: AppRootStateType): RequestStatusType => state.app.status)
+    const isInitialized = useSelector((state: AppRootStateType): boolean => state.app.isInitialized)
+    const isLoggedIn = useSelector((state: AppRootStateType): boolean => state.auth.isLoggedIn)
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(initializeAppTC())
+    }, [])
+
+    const logoutHendler = () => {
+        dispatch(logoutTC())
+    }
+    if (!isInitialized) {
+        return <div
+            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress />
+            <CircularProgress />
+        </div>
+    }
 // const error = useSelector((state: AppRootStateType): string | null => state.app.error)
 
     return (
-        <BrowserRouter>
             <div className="App">
                 <ErrorSnackbar/>
                 <AppBar position={'static'}>
@@ -32,11 +51,12 @@ const App: React.FC<PropsType> = ({demo = false}) => {
                         <Typography variant={'h5'}>
                             Todolists
                         </Typography>
-                        <Button
+                        {isLoggedIn && <Button
                             color={'inherit'}
-                            variant={"outlined"}>
-                            Login
-                        </Button>
+                            variant={"outlined"}
+                        onClick={logoutHendler}>
+                            Logout
+                        </Button>}
                     </Toolbar>
                     {status === "loading" && <LinearProgress color="secondary"/>}
                 </AppBar>
@@ -54,8 +74,8 @@ const App: React.FC<PropsType> = ({demo = false}) => {
                     </Switch>
                 </Container>
             </div>
-        </BrowserRouter>
+
     )
 }
 
-export default App
+

@@ -110,11 +110,28 @@ export const tasksApi = {
 
 
 export const authApi = {
+    me() {
+        return instance.get<ResponseType<AuthMeType>>('/auth/me').then(res => res.data)
+    },
+
     login(data: LoginRequestType) {
         return instance.post<ResponseType<{userId: number}>>(
             '/auth/login', data)
             .then(res => res.data)
+    },
+
+    logout() {
+        return instance.delete<ResponseType>('/auth/login').then(res => res.data)
     }
+}
+
+export type AuthMeType = {
+    id: number
+    email: string
+    login:string
+
+
+
 }
 
 export type LoginRequestType = {
