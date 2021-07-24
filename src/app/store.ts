@@ -2,8 +2,8 @@ import {TaskActionsType, tasksReducer} from '../features/TodolistList/tasks-redu
 import {TodoListActionType, todoListsReducer} from '../features/TodolistList/todolists-reducer';
 import {applyMiddleware, combineReducers, createStore} from 'redux';
 import thunk, {ThunkAction} from 'redux-thunk';
-import {AppActionsType, appReducer} from "./app-reducer";
-import {authReducer} from "../features/Login/auth-reduser";
+import appReducer,{AppActionsType} from "./app-reducer";
+import authReducer from "../features/Login/auth-reduser";
 import { configureStore } from '@reduxjs/toolkit';
 
 // объединяя reducer-ы с помощью combineReducers,

@@ -62,7 +62,7 @@ export const changeTodoListEntityStatusAC = (id: string, entityStatus: RequestSt
 
 // thunks
 
-export const fetchTodolistThunk = (): AppThunkType => (dispatch: Dispatch<AppRootActionType>) => {
+export const fetchTodolistThunk = (): AppThunkType => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC('loading'))
 
     todolistApi.getTodo()
@@ -146,5 +146,4 @@ export type TodoListActionType =
     | ReturnType<typeof changeTodoListTitleAC>
     | ReturnType<typeof changeTodoListFilterAC>
     | SetTodoListsActionType
-    | SetAppStatusActionType
     | ChangeTodoListEntityStatusActionType

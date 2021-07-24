@@ -6,9 +6,9 @@ import {tasksReducer} from "../../features/TodolistList/tasks-reducer";
 import {todoListsReducer} from "../../features/TodolistList/todolists-reducer";
 import {v1} from "uuid";
 import {TaskPriorities, TasksStatuses} from "../../api/todolist-api";
-import {appReducer} from "../../app/app-reducer";
+import appReducer from "../../app/app-reducer";
 import thunk from "redux-thunk";
-import {authReducer} from "../../features/Login/auth-reduser";
+import authReducer from "../../features/Login/auth-reduser";
 import { configureStore } from '@reduxjs/toolkit';
 
 const rootReducer = combineReducers({

@@ -1,30 +1,41 @@
 import { Dispatch } from 'redux'
-import { SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType } from '../../app/app-reducer'
+import {RequestStatusType, SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from '../../app/app-reducer'
 import {authApi, LoginRequestType, tasksApi} from "../../api/todolist-api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {addTaskAC} from "../TodolistList/tasks-reducer";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState = {
     isLoggedIn: false
 }
 type InitialStateType = typeof initialState
 
-export const authReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
-    switch (action.type) {
-        case 'login/SET-IS-LOGGED-IN':
-            debugger
-            const c = {...state, isLoggedIn: action.value}
-            return c
-        default:
-            return state
+const slice = createSlice({
+    name: 'auth',
+    initialState: initialState,
+    reducers: {
+        setIsLoggedInAC(state, action: PayloadAction<boolean>) {
+            state.isLoggedIn = action.payload
+        }
     }
-}
+})
+
+// export const authReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
+//     switch (action.type) {
+//         case 'login/SET-IS-LOGGED-IN':
+//
+//             const c = {...state, isLoggedIn: action.isLoggedIn}
+//             return c
+//         default:
+//             return state
+//     }
+// }
 // actions
-export const setIsLoggedInAC = (value: boolean) =>
-    ({type: 'login/SET-IS-LOGGED-IN', value} as const)
+
+export const {setIsLoggedInAC} = slice.actions
 
 // thunks
-export const loginTC = (payload: LoginRequestType) => async (dispatch: Dispatch<ActionsType>) => {
+export const loginTC = (payload: LoginRequestType) => async (dispatch: Dispatch) => {
     try {
         dispatch(setAppStatusAC('loading'))
         const data = await authApi.login(payload)
@@ -41,7 +52,7 @@ export const loginTC = (payload: LoginRequestType) => async (dispatch: Dispatch<
         handleServerNetworkError(e.message, dispatch)
     }
 }
-export const logoutTC = () => async (dispatch: Dispatch<ActionsType>) => {
+export const logoutTC = () => async (dispatch: Dispatch) => {
     try {
         dispatch(setAppStatusAC('loading'))
         const data = await authApi.logout()
@@ -60,7 +71,8 @@ export const logoutTC = () => async (dispatch: Dispatch<ActionsType>) => {
 }
 
 // types
-type ActionsType = ReturnType<typeof setIsLoggedInAC> | SetAppStatusActionType | SetAppErrorActionType
+type ActionsType = ReturnType<typeof setIsLoggedInAC>
 
+export default slice.reducer
 
 

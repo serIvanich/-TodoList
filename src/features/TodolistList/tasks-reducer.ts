@@ -118,7 +118,7 @@ const fetchTaskAC = (todoId: string, tasks: TasksType[]) =>
     ({type: 'SET-TASKS', todoId, tasks} as const)
 
 // thunk
-export const fetchTasksThunk = (todoId: string): AppThunkType => (dispatch: Dispatch<AppRootActionType>) => {
+export const fetchTasksThunk = (todoId: string): AppThunkType => (dispatch: Dispatch) => {
 
 
     tasksApi.getTasks(todoId)
