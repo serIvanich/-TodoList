@@ -4,6 +4,7 @@ import {applyMiddleware, combineReducers, createStore} from 'redux';
 import thunk, {ThunkAction} from 'redux-thunk';
 import {AppActionsType, appReducer} from "./app-reducer";
 import {authReducer} from "../features/Login/auth-reduser";
+import { configureStore } from '@reduxjs/toolkit';
 
 // объединяя reducer-ы с помощью combineReducers,
 // мы задаём структуру нашего единственного объекта-состояния
@@ -14,7 +15,12 @@ const rootReducer = combineReducers({
     auth: authReducer
 })
 // непосредственно создаём state
-export const store = createStore(rootReducer, applyMiddleware(thunk));
+// export const store = createStore(rootReducer, applyMiddleware(thunk));
+
+export const store = configureStore({
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(thunk)
+})
 
 // определить автоматически тип всего объекта состояния
 

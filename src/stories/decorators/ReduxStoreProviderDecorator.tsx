@@ -9,6 +9,7 @@ import {TaskPriorities, TasksStatuses} from "../../api/todolist-api";
 import {appReducer} from "../../app/app-reducer";
 import thunk from "redux-thunk";
 import {authReducer} from "../../features/Login/auth-reduser";
+import { configureStore } from '@reduxjs/toolkit';
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
@@ -50,8 +51,12 @@ const initialGlobalState = {
     }
 };
 
-export const storyBookStore = createStore(rootReducer,
-    initialGlobalState as AppRootStateType, applyMiddleware(thunk));
+export const storyBookStore = configureStore({
+    reducer: rootReducer,
+    preloadedState: initialGlobalState as AppRootStateType,
+    // initialGlobalState as AppRootStateType,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(thunk)
+})
 
 export const ReduxStoreProviderDecorator = (storyFn: any) => (
     <Provider

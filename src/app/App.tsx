@@ -16,7 +16,7 @@ type PropsType = {
     demo?: boolean
 }
 
-export const App: React.FC<PropsType> = ({demo = false}) => {
+const App: React.FC<PropsType> = ({demo = false}) => {
     const status = useSelector((state: AppRootStateType): RequestStatusType => state.app.status)
     const isInitialized = useSelector((state: AppRootStateType): boolean => state.app.isInitialized)
     const isLoggedIn = useSelector((state: AppRootStateType): boolean => state.auth.isLoggedIn)
@@ -78,4 +78,5 @@ export const App: React.FC<PropsType> = ({demo = false}) => {
     )
 }
 
+export default App
 
