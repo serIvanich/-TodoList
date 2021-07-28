@@ -1,16 +1,9 @@
 import {v1} from "uuid";
-import {
-    AddTodoListActionType,
-    RemoveTodoListActionType,
-    SetTodoListsActionType,
-    todoListID_1,
-    todoListID_2
-} from "./todolists-reducer";
+import {addTodoListAC, removeTodoListAC, setTodosAC, todoListID_1, todoListID_2} from "./todolists-reducer";
 import {TaskPriorities, tasksApi, TasksStatuses, TasksType} from "../../api/todolist-api";
-import {AppRootActionType, AppRootStateType, AppThunkType} from "../../app/store";
+import {AppRootStateType, AppThunkType} from "../../app/store";
 import {Dispatch} from "redux";
-import {log} from "util";
-import {setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
+import {setAppStatusAC} from "../../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 
 const initialState = {
@@ -57,16 +50,16 @@ const initialState = {
 
 export const tasksReducer =
     (state: InitialStateType = initialState,
-     action: TaskActionsType): InitialStateType => {
+     action: any): InitialStateType => {
         switch (action.type) {
 
             case "SET-TASKS":
 
                 return {...state, [action.todoId]: [...action.tasks]}
 
-            case "SET-TODOLISTS": {
+            case setTodosAC.type: {
                 const stateCopy = {...state}
-                action.todoLists.forEach(tl => {
+                action.todoLists.forEach((tl: any) => {
                     stateCopy[tl.id] = []
                 })
                 return stateCopy
@@ -87,13 +80,13 @@ export const tasksReducer =
                     [action.todoId]: state[action.todoId].map(t => t.id === action.taskId ? {...t, ...action.model} : t)
                 }
 
-            case "ADD-TODOLIST":
+            case addTodoListAC.type:
                 return {
                     ...state,
                     [action.todoList.id]: []
                 }
 
-            case "REMOVE-TODOLIST":
+            case removeTodoListAC.type:
                 let copyState = {...state}
                 delete copyState[action.todoListID]
                 return copyState
@@ -132,22 +125,22 @@ export const fetchTasksThunk = (todoId: string): AppThunkType => (dispatch: Disp
 }
 export const removeTaskThunk = (taskID: string, todolistId: string): AppThunkType => async dispatch => {
     try {
-        dispatch(setAppStatusAC('loading'))
+        dispatch(setAppStatusAC({status: 'loading'}))
         const data = await tasksApi.deleteTask(todolistId, taskID)
         dispatch(removeTaskAC(taskID, todolistId))
-        dispatch(setAppStatusAC('succeeded'))
+        dispatch(setAppStatusAC({status: 'succeeded'}))
     } catch (e) {
         handleServerNetworkError(e, dispatch)
     }
 }
 export const addTaskThunk = (todoId: string, title: string): AppThunkType => async dispatch => {
     try {
-        dispatch(setAppStatusAC('loading'))
+        dispatch(setAppStatusAC({status: 'loading'}))
         const data = await tasksApi.createTask(todoId, title)
         if (data.resultCode === 0) {
             const task = data.data.item
             dispatch(addTaskAC(task))
-            dispatch(setAppStatusAC('succeeded'))
+            dispatch(setAppStatusAC({status: 'succeeded'}))
         } else {
 
             handleServerAppError(data, dispatch)
@@ -193,9 +186,6 @@ export type TaskActionsType =
     | ReturnType<typeof addTaskAC>
     | ReturnType<typeof fetchTaskAC>
     | ReturnType<typeof updateTaskAC>
-    | AddTodoListActionType
-    | RemoveTodoListActionType
-    | SetTodoListsActionType
 
 type InitialStateType = typeof initialState
 
