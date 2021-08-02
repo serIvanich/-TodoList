@@ -58,13 +58,14 @@ export const initializeAppTC = () => async (dispatch: Dispatch) => {
         dispatch(setAppStatusAC({status: 'loading'}))
         const data = await authApi.me()
         if (data.resultCode === 0) {
-            dispatch(setIsInitializedAC({value: true}))
+
             dispatch(setIsLoggedInAC({value: true}));
             dispatch(setAppStatusAC({status: 'succeeded'}))
         } else {
 
             handleServerAppError(data, dispatch)
         }
+        dispatch(setIsInitializedAC({value: true}))
     } catch (e) {
 
         handleServerNetworkError(e.message, dispatch)
@@ -78,4 +79,4 @@ export const initializeAppTC = () => async (dispatch: Dispatch) => {
 
 // export type AppActionsType = SetAppStatusActionType | SetAppErrorActionType | SetIsInitializedAC
 
-export default slice.reducer
+export const appReducer = slice.reducer

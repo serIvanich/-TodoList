@@ -34,7 +34,6 @@ const App: React.FC<PropsType> = ({demo = false}) => {
         return <div
             style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
             <CircularProgress />
-            <CircularProgress />
         </div>
     }
 // const error = useSelector((state: AppRootStateType): string | null => state.app.error)

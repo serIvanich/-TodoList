@@ -23,7 +23,7 @@ const slice = createSlice({
         },
         removeTodoListAC(state, action: PayloadAction<{ todoListID: string }>) {
             const index = state.findIndex(tl => tl.id === action.payload.todoListID)
-            state.slice(index, 1)
+            state.splice(index, 1)
         },
         addTodoListAC(state, action: PayloadAction<{ todoList: TodolistType }>) {
             state.push({...action.payload.todoList, filter: 'all', entityStatus: "idle"})
@@ -93,6 +93,7 @@ export const removeTodoListThunk = (todoId: string): AppThunkType => async dispa
         dispatch(setAppStatusAC({status: 'loading'}))
         dispatch(changeTodoListEntityStatusAC({id: todoId, entityStatus: 'loading'}))
         const data = await todolistApi.deleteTodo(todoId)
+
         if (data.resultCode === 0) {
             dispatch(removeTodoListAC({todoListID: todoId}))
             dispatch(setAppStatusAC({status: 'succeeded'}))
