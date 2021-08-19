@@ -9,7 +9,7 @@ import {AppRootStateType} from "../../../app/store";
 
 import {TasksStatuses, TasksType} from "../../../api/todolist-api";
 import {FilterValuesType, TodolistDomainType} from "../todolists-reducer";
-import {fetchTasksThunk} from "../tasks-reducer";
+import {fetchTasks} from "../tasks-reducer";
 import Task from "./Task/Task";
 import {RequestStatusType} from "../../../app/app-reducer";
 
@@ -48,7 +48,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
         if (demo) {
             return;
         }
-        dispatch(fetchTasksThunk(props.todoList.id))
+        dispatch(fetchTasks(props.todoList.id))
     }, [])
 
 

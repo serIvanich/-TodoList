@@ -1,4 +1,4 @@
-import {addTaskAC, removeTaskAC, tasksReducer, TasksStateType, updateTaskAC} from "./tasks-reducer";
+import {addTaskAC, fetchTasks, removeTaskAC, tasksReducer, TasksStateType, updateTaskAC} from "./tasks-reducer";
 import {addTodoListAC, removeTodoListAC} from './todolists-reducer';
 import {TaskPriorities, TasksStatuses} from "../../api/todolist-api";
 
@@ -171,6 +171,19 @@ test('property with todolistId should be deleted', () => {
     expect(endState["todolistId2"]).toBeUndefined();
 });
 
+test('task should be added for todolist', () => {
+    const action = fetchTasks.fulfilled({
+        tasks: startState['todolistId1'],
+        todoId: 'todolistId1'
+    }, 'requestId', 'todolistId1')
+    const endState = tasksReducer({
+        'todolistId2': [],
+        'todolistId1': [],
+    }, action)
+
+    expect(endState['todolistId1'].length).toBe(3)
+    expect(endState['todolistId2'].length).toBe(0)
+})
 
 
 
