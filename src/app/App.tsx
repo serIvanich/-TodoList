@@ -24,10 +24,12 @@ const App: React.FC<PropsType> = ({demo = false}) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(initializeAppTC())
+        if (!demo) {
+            dispatch(initializeAppTC())
+        }
     }, [])
 
-    const logoutHendler = () => {
+    const logoutHandler = () => {
         dispatch(logoutTC())
     }
     if (!isInitialized) {
@@ -53,7 +55,7 @@ const App: React.FC<PropsType> = ({demo = false}) => {
                         {isLoggedIn && <Button
                             color={'inherit'}
                             variant={"outlined"}
-                        onClick={logoutHendler}>
+                        onClick={logoutHandler}>
                             Logout
                         </Button>}
                     </Toolbar>
@@ -69,11 +71,10 @@ const App: React.FC<PropsType> = ({demo = false}) => {
                             'fontSize': '50px'
                         }}>404 page not
                             found</h1>}/>
-                         <Redirect from={'*'} to={'/404'} />
+                         <Redirect from={'*'} to={'/'} />
                     </Switch>
                 </Container>
             </div>
-
     )
 }
 
