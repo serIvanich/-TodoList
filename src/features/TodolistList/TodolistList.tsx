@@ -12,7 +12,7 @@ import {
     TodolistDomainType,
     updateTodoListThunk
 } from "./todolists-reducer";
-import {addTaskThunk, removeTaskThunk, TasksStateType, updateTaskThunk} from "./tasks-reducer";
+import {addTaskThunk, removeTask, TasksStateType, updateTaskThunk} from "./tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {TasksStatuses} from "../../api/todolist-api";
 import {AppRootStateType} from "../../app/store";
@@ -39,9 +39,9 @@ export const TodolistList: React.FC<PropsType> = ({demo = false}) => {
     }, [])
 
 
-    const removeTask = useCallback((taskID: string, todoListID: string) => {
+    const removeTaskCallback = useCallback((taskID: string, todolistId: string) => {
 
-        dispatch(removeTaskThunk(taskID, todoListID))
+        dispatch(removeTask({taskID, todolistId}))
     }, [])
 
     const addTask = useCallback((title: string, todoListID: string) => {
@@ -92,7 +92,7 @@ export const TodolistList: React.FC<PropsType> = ({demo = false}) => {
                         tasks={allTodolistTask}
 
 
-                        removeTask={removeTask}
+                        removeTask={removeTaskCallback}
                         changeFilter={changeFilter}
                         addTask={addTask}
                         changeTaskStatus={changeTaskStatus}
