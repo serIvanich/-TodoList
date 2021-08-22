@@ -5,6 +5,7 @@ import thunk, {ThunkAction} from 'redux-thunk';
 import {appReducer} from "./app-reducer";
 import authReducer from "../features/Login/auth-reduser";
 import {configureStore} from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
 
 // объединяя reducer-ы с помощью combineReducers,
 // мы задаём структуру нашего единственного объекта-состояния
@@ -28,7 +29,8 @@ export type RootReducerType = typeof rootReducer
 export type AppRootStateType = ReturnType<RootReducerType>
 
 export type AppThunkType<ReturnType = void> = ThunkAction<ReturnType, AppRootStateType, unknown, any>
-
+type AppDispatchType = typeof store.dispatch
+export const useAppDispatch = () => useDispatch<AppDispatchType>()
 // а это, чтобы можно было в консоли браузера обращаться к state в любой момент
 // @ts-ignore
 window.store = store;

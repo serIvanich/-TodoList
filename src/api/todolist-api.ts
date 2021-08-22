@@ -15,9 +15,11 @@ export type TodolistType = {
     order: number
     title: string
 }
+export type FieldErrorType = { field: string, error: string }
 export type ResponseType<T = {}> = {
     resultCode: number
     messages: Array<string>
+    fieldsErrors?: Array<FieldErrorType>
     data: T
 
 
@@ -89,7 +91,7 @@ export type UpdateTaskModelType = {
 }
 export const tasksApi = {
     getTasks(todoId: string) {
-        return  instance.get<GetTasksResponseType>(`/todo-lists/${todoId}/tasks`)
+        return instance.get<GetTasksResponseType>(`/todo-lists/${todoId}/tasks`)
             .then(res => res.data)
     },
     createTask(todoId: string, title: string) {
@@ -108,14 +110,13 @@ export const tasksApi = {
 }
 
 
-
 export const authApi = {
     me() {
         return instance.get<ResponseType<AuthMeType>>('/auth/me').then(res => res.data)
     },
 
     login(data: LoginRequestType) {
-        return instance.post<ResponseType<{userId: number}>>(
+        return instance.post<ResponseType<{ userId: number }>>(
             '/auth/login', data)
             .then(res => res.data)
     },
@@ -128,8 +129,7 @@ export const authApi = {
 export type AuthMeType = {
     id: number
     email: string
-    login:string
-
+    login: string
 
 
 }

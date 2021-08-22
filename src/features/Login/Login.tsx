@@ -1,14 +1,15 @@
 import React from 'react'
 import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, TextField, Button, Grid} from '@material-ui/core'
-import {useFormik} from 'formik';
+import {FormikHelpers, useFormik} from 'formik';
 import {useDispatch, useSelector} from "react-redux";
 import {loginTC} from "./auth-reduser";
-import {AppRootStateType} from "../../app/store";
+import {AppRootStateType, useAppDispatch} from "../../app/store";
 import {Redirect} from "react-router-dom";
 
 export const Login = () => {
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state  => state.auth.isLoggedIn)
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
+
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
     const formik = useFormik({
         initialValues: {
@@ -31,14 +32,22 @@ export const Login = () => {
             return errors;
         },
 
-        onSubmit: values => {
-            dispatch(loginTC(values))
-            formik.resetForm()
+        onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<FormValuesType>) => {
+            const action = await dispatch(loginTC(values))
+            if (loginTC.rejected.match(action)) {
+                if (action.payload?.fieldsErrors?.length) {
+                    const error = action.payload?.fieldsErrors[0]
+                    formikHelpers.setFieldError(error.field, error.error)
+                }
+            }
+
+
+            // formik.resetForm()
         },
     })
 
     if (isLoggedIn) {
-        return <Redirect to={'/'} />
+        return <Redirect to={'/'}/>
     }
 
     return <Grid container justify="center">
@@ -62,7 +71,7 @@ export const Login = () => {
                             {...formik.getFieldProps('email')}
                         />
                         {formik.touched.email && formik.errors.email &&
-                            <div style={{color: 'red'}}>{formik.errors.email}</div>}
+                        <div style={{color: 'red'}}>{formik.errors.email}</div>}
                         <TextField
                             type="password"
                             label="Password"
@@ -74,7 +83,7 @@ export const Login = () => {
                             {...formik.getFieldProps('password')}
                         />
                         {formik.touched.password && formik.errors.password &&
-                            <div style={{color: 'red'}}>{formik.errors.password}</div> }
+                        <div style={{color: 'red'}}>{formik.errors.password}</div>}
 
                         <FormControlLabel
                             label={'Remember me'}
@@ -93,5 +102,10 @@ type FormikErrorType = {
     email?: string
     password?: string
     rememberMe?: boolean
+}
+type FormValuesType = {
+    email: string
+    password: string
+    rememberMe: boolean
 }
 
