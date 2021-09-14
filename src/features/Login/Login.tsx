@@ -5,11 +5,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {loginTC} from "./auth-reduser";
 import {AppRootStateType, useAppDispatch} from "../../app/store";
 import {Redirect} from "react-router-dom";
+import {selectorLoggedIn} from "../../app/App";
 
 export const Login = () => {
     const dispatch = useAppDispatch()
 
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+    const isLoggedIn = useSelector(selectorLoggedIn)
 
     const formik = useFormik({
         initialValues: {

@@ -18,6 +18,7 @@ import {TasksStatuses} from "../../api/todolist-api";
 import {AppRootStateType} from "../../app/store";
 import {TodoList} from './TodoList/TodoList';
 import {Redirect} from "react-router-dom";
+import {selectorLoggedIn, selectorTasks, selectorTodoLists} from "../../app/App";
 
 type PropsType = {
     demo?: boolean
@@ -25,9 +26,9 @@ type PropsType = {
 
 export const TodolistList: React.FC<PropsType> = ({demo = false}) => {
 
-    const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
-    const todoLists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todoLists)
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state  => state.auth.isLoggedIn)
+    const tasks = useSelector(selectorTasks)
+    const todoLists = useSelector(selectorTodoLists)
+    const isLoggedIn = useSelector(selectorLoggedIn)
 
     const dispatch = useDispatch()
 

@@ -16,10 +16,19 @@ type PropsType = {
     demo?: boolean
 }
 
+//selector all
+export const selectorStatus = (state: AppRootStateType) => state.app.status
+export const selectorInitialized = (state: AppRootStateType) => state.app.isInitialized
+export const selectorLoggedIn = (state: AppRootStateType) => state.auth.isLoggedIn
+export const selectorTasks = (state: AppRootStateType) => state.tasks
+export const selectorTodoLists = (state: AppRootStateType) => state.todoLists
+
+
 const App: React.FC<PropsType> = ({demo = false}) => {
-    const status = useSelector((state: AppRootStateType): RequestStatusType => state.app.status)
-    const isInitialized = useSelector((state: AppRootStateType): boolean => state.app.isInitialized)
-    const isLoggedIn = useSelector((state: AppRootStateType): boolean => state.auth.isLoggedIn)
+
+    const status = useSelector(selectorStatus)
+    const isInitialized = useSelector(selectorInitialized)
+    const isLoggedIn = useSelector(selectorLoggedIn)
 
     const dispatch = useDispatch()
 
