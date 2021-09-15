@@ -63,15 +63,18 @@ export const fetchTasks = createAsyncThunk('tasks/fetchTasks',
         }
     })
 export const removeTask = createAsyncThunk('tasks/removeTask',
-    (param: { taskID: string, todolistId: string }, thunkAPI) => {
+    async (param: { taskID: string, todolistId: string }, thunkAPI) => {
 
         thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
-        return tasksApi.deleteTask(param.todolistId, param.taskID)
-            .then(res => {
-                thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
-                // thunkAPI.dispatch(removeTaskAC({taskID: param.taskID, todolistId: param.todolistId}))
-                return {taskID: param.taskID, todolistId: param.todolistId}
-            })
+        try {
+            const res = await tasksApi.deleteTask(param.todolistId, param.taskID)
+            thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
+            // thunkAPI.dispatch(removeTaskAC({taskID: param.taskID, todolistId: param.todolistId}))
+            return {taskID: param.taskID, todolistId: param.todolistId}
+        } catch (e) {
+
+        }
+
     })
 
 
@@ -175,12 +178,14 @@ const slice = createSlice({
             }
         })
         builder.addCase(removeTask.fulfilled, (state, action) => {
+            if (action.payload) {
+                const tasks = state[action.payload.todolistId]
+                //@ts-ignore
+                const index = tasks.findIndex(t => t.id === action.payload.taskID)
+                if (index > -1) {
+                    tasks.splice(index, 1)
 
-            const tasks = state[action.payload.todolistId]
-            const index = tasks.findIndex(t => t.id === action.payload.taskID)
-            if (index > -1) {
-                tasks.splice(index, 1)
-
+                }
             }
         })
 
@@ -188,7 +193,7 @@ const slice = createSlice({
 })
 
 export const tasksReducer = slice.reducer
-export const { addTaskAC,  updateTaskAC} = slice.actions
+export const {addTaskAC, updateTaskAC} = slice.actions
 //     (state: InitialStateType = initialState,
 //      action: any): InitialStateType => {
 //         switch (action.type) {
