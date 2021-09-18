@@ -48,6 +48,43 @@ export const logoutTC = createAsyncThunk
     }
 })
 
+
+const slice = createSlice({
+    name: 'auth',
+    initialState: {
+        isLoggedIn: false
+    },
+    reducers: {
+        setIsLoggedInAC(state, action: PayloadAction<{ value: boolean }>) {
+            state.isLoggedIn = action.payload.value
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(loginTC.fulfilled, (state) => {
+            state.isLoggedIn = true
+        })
+        builder.addCase(logoutTC.fulfilled, (state) => {
+            state.isLoggedIn = false
+        })
+    }
+})
+
+export const {setIsLoggedInAC} = slice.actions
+
+export default slice.reducer
+
+// export const authReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
+//     switch (action.type) {
+//         case 'login/SET-IS-LOGGED-IN':
+//
+//             const c = {...state, isLoggedIn: action.isLoggedIn}
+//             return c
+//         default:
+//             return state
+//     }
+// }
+// actions
+// thunks
 // export const logoutTC = () => async (dispatch: Dispatch) => {
 //     try {
 //         dispatch(setAppStatusAC({status: 'loading'}))
@@ -85,46 +122,9 @@ export const logoutTC = createAsyncThunk
 // }
 
 
-const slice = createSlice({
-    name: 'auth',
-    initialState: {
-        isLoggedIn: false
-    },
-    reducers: {
-        setIsLoggedInAC(state, action: PayloadAction<{ value: boolean }>) {
-            state.isLoggedIn = action.payload.value
-        }
-    },
-    extraReducers: (builder) => {
-        builder.addCase(loginTC.fulfilled, (state) => {
-            state.isLoggedIn = true
-        })
-        builder.addCase(logoutTC.fulfilled, (state) => {
-            state.isLoggedIn = false
-        })
-    }
-})
-
-// export const authReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
-//     switch (action.type) {
-//         case 'login/SET-IS-LOGGED-IN':
-//
-//             const c = {...state, isLoggedIn: action.isLoggedIn}
-//             return c
-//         default:
-//             return state
-//     }
-// }
-// actions
-
-export const {setIsLoggedInAC} = slice.actions
-
-// thunks
-
-
 // types
 
 
-export default slice.reducer
+
 
 
