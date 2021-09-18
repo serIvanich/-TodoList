@@ -1,4 +1,12 @@
-import {addTaskAC, fetchTasks, removeTask, tasksReducer, TasksStateType, updateTaskAC} from "./tasks-reducer";
+import {
+    addTaskAC,
+    addTaskThunk,
+    fetchTasks,
+    removeTask,
+    tasksReducer,
+    TasksStateType,
+    updateTaskAC
+} from "./tasks-reducer";
 import {addTodoListAC, removeTodoListAC} from './todolists-reducer';
 import {TaskPriorities, TasksStatuses} from "../../api/todolist-api";
 
@@ -95,7 +103,7 @@ test('correct task should be added to correct array', () => {
         priority: TaskPriorities.Hi, startDate: '', deadline: '', todoListId: "todolistId2",
         order: 0, addedDate: ''
     }
-    const action = addTaskAC(task);
+    const action = addTaskThunk.fulfilled(task, 'requestId', {title: task.title, todoId: task.todoListId})
 
     const endState = tasksReducer(startState, action)
 
