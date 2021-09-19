@@ -1,62 +1,20 @@
-import {addTodoListAC, removeTodoListAC, setTodosAC} from "./todolists-reducer";
+import {addTodoListThunk, fetchTodolistThunk, removeTodoListThunk} from "./todolists-reducer";
 import {tasksApi, TasksStatuses, TasksType} from "../../api/todolist-api";
-import {AppRootStateType, AppThunkType} from "../../app/store";
-import {Dispatch} from "redux";
+import {AppRootStateType} from "../../app/store";
 import {setAppStatusAC} from "../../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
-const initialState = {
-    // [todoListID_1]: [
-    //     {
-    //         id: v1(), title: 'HTML', status: TasksStatuses.New, description: '', completed: true,
-    //         priority: TaskPriorities.Hi, startDate: '', deadline: '', todoListId: todoListID_1,
-    //         order: 0, addedDate: ''
-    //     },
-    //     {
-    //         id: v1(), title: 'CSS', status: TasksStatuses.New, description: '', completed: true,
-    //         priority: TaskPriorities.Hi, startDate: '', deadline: '', todoListId: todoListID_1,
-    //         order: 0, addedDate: ''
-    //     },
-    //     {
-    //         id: v1(), title: 'React', status: TasksStatuses.Completed, description: '', completed: true,
-    //         priority: TaskPriorities.Low, startDate: '', deadline: '', todoListId: todoListID_1,
-    //         order: 0, addedDate: ''
-    //     },
-    //     {
-    //         id: v1(), title: 'JavaScript', status: TasksStatuses.New, description: '', completed: true,
-    //         priority: TaskPriorities.Later, startDate: '', deadline: '', todoListId: todoListID_1,
-    //         order: 0, addedDate: ''
-    //     },
-    // ],
-    // [todoListID_2]: [
-    //     {
-    //         id: v1(), title: 'Milk', status: TasksStatuses.Completed, description: '', completed: true,
-    //         priority: TaskPriorities.Hi, startDate: '', deadline: '', todoListId: todoListID_2,
-    //         order: 0, addedDate: ''
-    //     },
-    //     {
-    //         id: v1(), title: 'Meat', status: TasksStatuses.New, description: '', completed: true,
-    //         priority: TaskPriorities.Hi, startDate: '', deadline: '', todoListId: todoListID_2,
-    //         order: 0, addedDate: ''
-    //     },
-    //     {
-    //         id: v1(), title: 'Bread', status: TasksStatuses.Completed, description: '', completed: true,
-    //         priority: TaskPriorities.Hi, startDate: '', deadline: '', todoListId: todoListID_2,
-    //         order: 0, addedDate: ''
-    //     },
-    // ],
-} as TasksStateType
 
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks',
-    async (todoId: string, thunkAPI) => {
+    async (param: { todoListId: string }, thunkAPI) => {
         thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
         try {
 
-            const data = await tasksApi.getTasks(todoId)
+            const data = await tasksApi.getTasks(param.todoListId)
             const tasks = data.items
             thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
-            return {todoId, tasks}
+            return {todoListId: param.todoListId, tasks}
         } catch (e) {
             handleServerNetworkError(e, thunkAPI.dispatch)
             return thunkAPI.rejectWithValue(null)
@@ -68,7 +26,6 @@ export const removeTask = createAsyncThunk('tasks/removeTask',
         try {
             const res = await tasksApi.deleteTask(param.todolistId, param.taskID)
             thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
-            // thunkAPI.dispatch(removeTaskAC({taskID: param.taskID, todolistId: param.todolistId}))
             return param
         } catch (e) {
             handleServerNetworkError(e.message, thunkAPI.dispatch)
@@ -77,10 +34,10 @@ export const removeTask = createAsyncThunk('tasks/removeTask',
 
     })
 export const addTaskThunk = createAsyncThunk('tasks/addTask',
-    async (param: { todoId: string, title: string }, {dispatch, rejectWithValue}) => {
+    async (param: { todoListId: string, title: string }, {dispatch, rejectWithValue}) => {
         dispatch(setAppStatusAC({status: 'loading'}))
         try {
-            const data = await tasksApi.createTask(param.todoId, param.title)
+            const data = await tasksApi.createTask(param.todoListId, param.title)
             if (data.resultCode === 0) {
                 // const task = data.data.item
                 // dispatch(addTaskAC(task))
@@ -88,21 +45,21 @@ export const addTaskThunk = createAsyncThunk('tasks/addTask',
                 return data.data.item
             } else {
                 handleServerAppError(data, dispatch)
-                return rejectWithValue(null)
+                return rejectWithValue({})
             }
         } catch (e) {
             handleServerNetworkError(e.message, dispatch)
-            return rejectWithValue(null)
+            return rejectWithValue({})
         }
     })
 export const updateTaskThunk = createAsyncThunk('tasks/updateTask',
-    async (param: { todoId: string, taskId: string, model: UpdateDomainTaskModelType }, {
+    async (param: { todoListId: string, taskId: string, model: UpdateDomainTaskModelType }, {
         getState,
         dispatch,
         rejectWithValue
     }) => {
         const state = getState() as AppRootStateType
-        const task = state.tasks[param.todoId].find((t) => t.id === param.taskId)
+        const task = state.tasks[param.todoListId].find((t) => t.id === param.taskId)
 
         if (!task) {
 
@@ -118,7 +75,7 @@ export const updateTaskThunk = createAsyncThunk('tasks/updateTask',
             ...param.model
         }
         try {
-            const data = await tasksApi.updateTask(param.todoId, param.taskId, domainModel)
+            const data = await tasksApi.updateTask(param.todoListId, param.taskId, domainModel)
             if (data.resultCode === 0) {
 
                 return param
@@ -133,42 +90,41 @@ export const updateTaskThunk = createAsyncThunk('tasks/updateTask',
     })
 const slice = createSlice({
     name: 'tasks',
-    initialState: initialState,
+    initialState: {} as TasksStateType,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(addTodoListAC, (state, action) => {
+        builder.addCase(addTodoListThunk.fulfilled, (state, action) => {
             state[action.payload.todoList.id] = []
         })
-        builder.addCase(removeTodoListAC, (state, action) => {
-            delete state[action.payload.todoListID]
+        builder.addCase(removeTodoListThunk.fulfilled, (state, action) => {
+            delete state[action.payload.todoListId]
         })
-        builder.addCase(setTodosAC, (state, action) => {
+        builder.addCase(fetchTodolistThunk.fulfilled, (state, action) => {
             action.payload.todoLists.forEach(tl => {
                 state[tl.id] = []
             })
         })
         builder.addCase(fetchTasks.fulfilled, (state, action) => {
-                state[action.payload.todoId] = action.payload.tasks
+            state[action.payload.todoListId] = action.payload.tasks
         })
         builder.addCase(removeTask.fulfilled, (state, action) => {
-                const tasks = state[action.payload.todolistId]
-                //@ts-ignore
-                const index = tasks.findIndex(t => t.id === action.payload.taskID)
-                if (index > -1) {
-                    tasks.splice(index, 1)
-                }
+            const tasks = state[action.payload.todolistId]
+            //@ts-ignore
+            const index = tasks.findIndex(t => t.id === action.payload.taskID)
+            if (index > -1) {
+                tasks.splice(index, 1)
+            }
         })
         builder.addCase(addTaskThunk.fulfilled, (state, action) => {
             state[action.payload.todoListId].unshift(action.payload)
-
         })
         builder.addCase(updateTaskThunk.fulfilled, (state, action) => {
-                const tasks = state[action.payload.todoId]
-                //@ts-ignore
-                const index = tasks.findIndex(t => t.id === action.payload.taskId)
-                if (index > -1) {
-                    tasks[index] = {...tasks[index], ...action.payload.model}
-                }
+            const tasks = state[action.payload.todoListId]
+            //@ts-ignore
+            const index = tasks.findIndex(t => t.id === action.payload.taskId)
+            if (index > -1) {
+                tasks[index] = {...tasks[index], ...action.payload.model}
+            }
         })
     }
 })
@@ -188,6 +144,48 @@ export type TasksStateType = {
     [key: string]: Array<TasksType>
 }
 
+
+// const initialState = {
+// [todoListID_1]: [
+//     {
+//         id: v1(), title: 'HTML', status: TasksStatuses.New, description: '', completed: true,
+//         priority: TaskPriorities.Hi, startDate: '', deadline: '', todoListId: todoListID_1,
+//         order: 0, addedDate: ''
+//     },
+//     {
+//         id: v1(), title: 'CSS', status: TasksStatuses.New, description: '', completed: true,
+//         priority: TaskPriorities.Hi, startDate: '', deadline: '', todoListId: todoListID_1,
+//         order: 0, addedDate: ''
+//     },
+//     {
+//         id: v1(), title: 'React', status: TasksStatuses.Completed, description: '', completed: true,
+//         priority: TaskPriorities.Low, startDate: '', deadline: '', todoListId: todoListID_1,
+//         order: 0, addedDate: ''
+//     },
+//     {
+//         id: v1(), title: 'JavaScript', status: TasksStatuses.New, description: '', completed: true,
+//         priority: TaskPriorities.Later, startDate: '', deadline: '', todoListId: todoListID_1,
+//         order: 0, addedDate: ''
+//     },
+// ],
+// [todoListID_2]: [
+//     {
+//         id: v1(), title: 'Milk', status: TasksStatuses.Completed, description: '', completed: true,
+//         priority: TaskPriorities.Hi, startDate: '', deadline: '', todoListId: todoListID_2,
+//         order: 0, addedDate: ''
+//     },
+//     {
+//         id: v1(), title: 'Meat', status: TasksStatuses.New, description: '', completed: true,
+//         priority: TaskPriorities.Hi, startDate: '', deadline: '', todoListId: todoListID_2,
+//         order: 0, addedDate: ''
+//     },
+//     {
+//         id: v1(), title: 'Bread', status: TasksStatuses.Completed, description: '', completed: true,
+//         priority: TaskPriorities.Hi, startDate: '', deadline: '', todoListId: todoListID_2,
+//         order: 0, addedDate: ''
+//     },
+// ],
+// } as TasksStateType
 // export const removeTaskThunk_ = (taskID: string, todolistId: string): AppThunkType => async dispatch => {
 //     try {
 //         dispatch(setAppStatusAC({status: 'loading'}))
@@ -246,26 +244,26 @@ export type TasksStateType = {
 //
 
 
-        // removeTaskAC(state, action: PayloadAction<{ taskID: string, todolistId: string }>) {
-        //     const tasks = state[action.payload.todolistId]
-        //     const index = tasks.findIndex(t => t.id === action.payload.taskID)
-        //     if (index > -1) {
-        //         tasks.splice(index, 1)
-        //     }
-        // },
-        // addTaskAC(state, action: PayloadAction<TasksType>) {
-        //     state[action.payload.todoListId].unshift(action.payload)
-        // },
-        // updateTaskAC(state, action: PayloadAction<{ todoId: string, taskId: string, model: UpdateDomainTaskModelType }>) {
-        //     const tasks = state[action.payload.todoId]
-        //     const index = tasks.findIndex(t => t.id === action.payload.taskId)
-        //     if (index > -1) {
-        //         tasks[index] = {...tasks[index], ...action.payload.model}
-        //     }
-        // },
-        // fetchTaskAC(state, action: PayloadAction<{ todoId: string, tasks: TasksType[] }>) {
-        //     state[action.payload.todoId] = action.payload.tasks
-        // },
+// removeTaskAC(state, action: PayloadAction<{ taskID: string, todolistId: string }>) {
+//     const tasks = state[action.payload.todolistId]
+//     const index = tasks.findIndex(t => t.id === action.payload.taskID)
+//     if (index > -1) {
+//         tasks.splice(index, 1)
+//     }
+// },
+// addTaskAC(state, action: PayloadAction<TasksType>) {
+//     state[action.payload.todoListId].unshift(action.payload)
+// },
+// updateTaskAC(state, action: PayloadAction<{ todoId: string, taskId: string, model: UpdateDomainTaskModelType }>) {
+//     const tasks = state[action.payload.todoId]
+//     const index = tasks.findIndex(t => t.id === action.payload.taskId)
+//     if (index > -1) {
+//         tasks[index] = {...tasks[index], ...action.payload.model}
+//     }
+// },
+// fetchTaskAC(state, action: PayloadAction<{ todoId: string, tasks: TasksType[] }>) {
+//     state[action.payload.todoId] = action.payload.tasks
+// },
 
 // export const {updateTaskAC} = slice.actions
 //     (state: InitialStateType = initialState,

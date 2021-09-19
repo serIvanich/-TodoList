@@ -6,7 +6,7 @@ import {TasksStatuses, TasksType} from "../../../../api/todolist-api";
 
 export type TaskPropsType = {
     task: TasksType
-    todoListId: string
+    todoId: string
     changeTaskStatus: (taskID: string, newStatus: TasksStatuses, todoListId: string) => void
     changeTaskTitle: (taskID: string, title: string, todoListId: string) => void
     removeTask: (taskID: string, todoListId: string) => void
@@ -16,7 +16,7 @@ export type TaskPropsType = {
 
 const Task: React.FC<TaskPropsType> = React.memo(({
                                                       task,
-                                                      todoListId,
+                                                      todoId,
                                                       changeTaskStatus,
                                                       changeTaskTitle,
                                                       removeTask,
@@ -25,13 +25,13 @@ const Task: React.FC<TaskPropsType> = React.memo(({
 
     const onChangeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const newStatus = e.currentTarget.checked ? TasksStatuses.Completed : TasksStatuses.New
-        changeTaskStatus(task.id, newStatus, todoListId)
-    }, [task, todoListId])
+        changeTaskStatus(task.id, newStatus, todoId)
+    }, [task, todoId])
 
     const onChangeTaskTitle = useCallback((newTitle: string) => {
-        changeTaskTitle(task.id, newTitle, todoListId)
-    }, [task, todoListId])
-    const onRemoveTask = useCallback(() => removeTask(task.id, todoListId), [task, todoListId])
+        changeTaskTitle(task.id, newTitle, todoId)
+    }, [task, todoId])
+    const onRemoveTask = useCallback(() => removeTask(task.id, todoId), [task, todoId])
 
     return (
         <li key={task.id}>

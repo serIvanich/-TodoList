@@ -48,7 +48,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
         if (demo) {
             return;
         }
-        dispatch(fetchTasks(props.todoList.id))
+        dispatch(fetchTasks({todoListId: props.todoList.id}))
     }, [])
 
 
@@ -56,7 +56,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
 
 
         return (
-            <Task key={t.id} task={t} todoListId={props.todoList.id}
+            <Task key={t.id} task={t} todoId={props.todoList.id}
                   changeTaskStatus={props.changeTaskStatus}
                   changeTaskTitle={props.changeTaskTitle}
                   removeTask={props.removeTask}

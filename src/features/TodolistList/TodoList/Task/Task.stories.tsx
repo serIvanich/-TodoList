@@ -27,7 +27,7 @@ TaskIsDoneExample.args = {
   task: {id: '1', title: 'JS', status: TasksStatuses.Completed, description: '', completed: true,
     priority: TaskPriorities.Hi, startDate: '', deadline: '', todoListId: 'todolistID1',
     order: 0, addedDate: ''},
-  todoListId: 'todolistID1',
+  todoId: 'todolistID1',
 };
 
 export const TaskIsNotDoneExample = Template.bind({});
@@ -36,6 +36,6 @@ TaskIsNotDoneExample.args = {
   task: {id: '2', title: 'HTML', status: TasksStatuses.New, description: '', completed: true,
     priority: TaskPriorities.Hi, startDate: '', deadline: '', todoListId: 'todolistID1',
     order: 0, addedDate: ''},
-  todoListId: 'todolistID1',
+  todoId: 'todolistID1',
 };
 

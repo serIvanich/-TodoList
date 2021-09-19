@@ -1,5 +1,4 @@
 import axios from "axios"
-import {log} from "util";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -33,12 +32,12 @@ export const todolistApi = {
         return instance.post<ResponseType<{ item: TodolistType }>>('todo-lists', {title})
             .then(res => res.data)
     },
-    deleteTodo(todoId: string) {
-        return instance.delete<ResponseType>(`todo-lists/${todoId}`)
+    deleteTodo(todoListId: string) {
+        return instance.delete<ResponseType>(`todo-lists/${todoListId}`)
             .then(res => res.data)
     },
-    updateTodo(todoId: string, title: string) {
-        return instance.put<ResponseType>(`todo-lists/${todoId}`, {title})
+    updateTodo(todoListId: string, title: string) {
+        return instance.put<ResponseType>(`todo-lists/${todoListId}`, {title})
             .then(res => res.data)
     }
 }
