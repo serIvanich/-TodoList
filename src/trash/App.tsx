@@ -160,7 +160,7 @@ import React from 'react'
 //                     <Button
 //                         color={'inherit'}
 //                         variant={"outlined"}>
-//                         Login
+//                         auth
 //                     </Button>
 //                 </Toolbar>
 //             </AppBar>

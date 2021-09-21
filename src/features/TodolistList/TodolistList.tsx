@@ -5,7 +5,8 @@ import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Grid, Paper} from "@material-ui/core";
 import {
     addTodoListThunk,
-    changeTodoListFilterAC, changeTodoListTitleThunk,
+    changeTodoListFilterAC,
+    changeTodoListTitleThunk,
     fetchTodolistThunk,
     FilterValuesType,
     removeTodoListThunk
@@ -15,7 +16,10 @@ import {useDispatch, useSelector} from "react-redux";
 import {TasksStatuses} from "../../api/todolist-api";
 import {TodoList} from './TodoList/TodoList';
 import {Redirect} from "react-router-dom";
-import {selectorLoggedIn, selectorTasks, selectorTodoLists} from "../../app/App";
+import {selectorTasks, selectorTodoLists} from "../../app/App";
+import {authSelectors} from "../auth";
+import {bindActionCreators} from "redux";
+import {useActions} from "../../app/store";
 
 type PropsType = {
     demo?: boolean
@@ -25,8 +29,7 @@ export const TodolistList: React.FC<PropsType> = ({demo = false}) => {
 
     const tasks = useSelector(selectorTasks)
     const todoLists = useSelector(selectorTodoLists)
-    const isLoggedIn = useSelector(selectorLoggedIn)
-
+    const isLoggedIn = useSelector(authSelectors.selectorLoggedIn)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -38,8 +41,10 @@ export const TodolistList: React.FC<PropsType> = ({demo = false}) => {
 
 
     const removeTaskCallback = useCallback((taskID: string, todolistId: string) => {
-
-        dispatch(removeTask({taskID, todolistId}))
+        const callbacks = bindActionCreators({removeTask}, dispatch)
+        // const callbacks = useActions({removeTask})
+        callbacks.removeTask({taskID, todolistId})
+        // dispatch(removeTask({taskID, todolistId}))
     }, [])
 
     const addTask = useCallback((title: string, todoListId: string) => {
@@ -105,7 +110,7 @@ export const TodolistList: React.FC<PropsType> = ({demo = false}) => {
     })
 
     if (!isLoggedIn) {
-        return <Redirect to={'/login'} />
+        return <Redirect to={'/login'}/>
     }
 
     return <>

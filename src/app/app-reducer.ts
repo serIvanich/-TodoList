@@ -1,6 +1,6 @@
 import {Dispatch} from "redux"
 import {authApi, FieldErrorType, LoginRequestType} from "../api/todolist-api";
-import {setIsLoggedInAC} from "../features/Login/auth-reduser";
+import {setIsLoggedInAC} from "../features/auth/auth-reduser";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 

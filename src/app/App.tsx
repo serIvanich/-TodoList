@@ -8,27 +8,30 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
 import {initializeAppTC, RequestStatusType} from "./app-reducer";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
-import {Login} from "../features/Login/Login";
+import {Login} from "../features/auth/Login";
 import {Redirect, Route, Switch} from 'react-router-dom';
-import {logoutTC} from "../features/Login/auth-reduser";
+import {logoutTC} from "../features/auth/auth-reduser";
+import { selectorInitialized, selectorStatus } from './selectors';
+import {appSelectors} from "./index";
+import {authSelectors} from "../features/auth";
+
 
 type PropsType = {
     demo?: boolean
 }
 
 //selector all
-export const selectorStatus = (state: AppRootStateType) => state.app.status
-export const selectorInitialized = (state: AppRootStateType) => state.app.isInitialized
-export const selectorLoggedIn = (state: AppRootStateType) => state.auth.isLoggedIn
+
+
 export const selectorTasks = (state: AppRootStateType) => state.tasks
 export const selectorTodoLists = (state: AppRootStateType) => state.todoLists
 
 
 const App: React.FC<PropsType> = ({demo = false}) => {
 
-    const status = useSelector(selectorStatus)
-    const isInitialized = useSelector(selectorInitialized)
-    const isLoggedIn = useSelector(selectorLoggedIn)
+    const status = useSelector(appSelectors.selectorStatus)
+    const isInitialized = useSelector(appSelectors.selectorInitialized)
+    const isLoggedIn = useSelector(authSelectors.selectorLoggedIn)
 
     const dispatch = useDispatch()
 

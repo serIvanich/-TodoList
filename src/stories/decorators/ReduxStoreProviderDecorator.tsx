@@ -8,7 +8,7 @@ import {v1} from "uuid";
 import {TaskPriorities, TasksStatuses} from "../../api/todolist-api";
 import {appReducer} from "../../app/app-reducer";
 import thunk from "redux-thunk";
-import authReducer from "../../features/Login/auth-reduser";
+import authReducer from "../../features/auth/auth-reduser";
 import { configureStore } from '@reduxjs/toolkit';
 import {HashRouter} from "react-router-dom";
 
