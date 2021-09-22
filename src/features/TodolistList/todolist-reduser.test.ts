@@ -1,15 +1,13 @@
 import {
-    addTodoListThunk,
     changeTodoListEntityStatusAC,
     changeTodoListFilterAC,
-    changeTodoListTitleThunk,
     FilterValuesType,
-    removeTodoListThunk,
     TodolistDomainType,
     todoListsReducer
 } from "./todolists-reducer";
 import {v1} from "uuid"
 import {RequestStatusType} from "../../app/app-reducer";
+import {addTodoListThunk, changeTodoListTitleThunk, removeTodoListThunk} from "./todolist-actions";
 
 let todoListId_1: string
 let todoListId_2: string

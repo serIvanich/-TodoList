@@ -9,8 +9,8 @@ import {AppRootStateType} from "../../../app/store";
 
 import {TasksStatuses, TasksType} from "../../../api/todolist-api";
 import {FilterValuesType, TodolistDomainType} from "../todolists-reducer";
-import {fetchTasks} from "../tasks-reducer";
 import Task from "./Task/Task";
+import {fetchTasks} from "../tasks-actions";
 
 
 type TodoListPropsType = {
