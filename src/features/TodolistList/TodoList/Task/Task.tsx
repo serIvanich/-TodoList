@@ -9,7 +9,7 @@ export type TaskPropsType = {
     todoId: string
     changeTaskStatus: (taskID: string, newStatus: TasksStatuses, todoListId: string) => void
     changeTaskTitle: (taskID: string, title: string, todoListId: string) => void
-    removeTask: (taskID: string, todoListId: string) => void
+    removeTask: (param: { taskId: string, todolistId: string }) => void
 
 }
 
@@ -31,7 +31,7 @@ const Task: React.FC<TaskPropsType> = React.memo(({
     const onChangeTaskTitle = useCallback((newTitle: string) => {
         changeTaskTitle(task.id, newTitle, todoId)
     }, [task, todoId])
-    const onRemoveTask = useCallback(() => removeTask(task.id, todoId), [task, todoId])
+    const onRemoveTask = useCallback(() => removeTask({taskId: task.id, todolistId: todoId}), [task, todoId])
 
     return (
         <li key={task.id}>

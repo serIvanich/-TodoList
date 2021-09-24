@@ -1,37 +1,37 @@
 import {TodolistType} from "../../api/todolist-api";
 import {RequestStatusType} from "../../app/app-reducer";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {addTodoListThunk, changeTodoListTitleThunk, fetchTodolistThunk, removeTodoListThunk} from "./todolist-actions";
+import {addTodoList, changeTodoListTitle, fetchTodolist, removeTodoList} from "./todolists-actions";
 
 
-const slice = createSlice({
+export const slice = createSlice({
     name: 'todoLists',
     initialState: [] as Array<TodolistDomainType>,
     reducers: {
 
-        changeTodoListFilterAC(state, action: PayloadAction<{ value: FilterValuesType, todoListId: string }>) {
+        changeTodoListFilter(state, action: PayloadAction<{ value: FilterValuesType, todoListId: string }>) {
             const index = state.findIndex(tl => tl.id === action.payload.todoListId)
             state[index].filter = action.payload.value
         },
-        changeTodoListEntityStatusAC(state, action: PayloadAction<{ id: string, entityStatus: RequestStatusType }>) {
+        changeTodoListEntityStatus(state, action: PayloadAction<{ id: string, entityStatus: RequestStatusType }>) {
             const index = state.findIndex(tl => tl.id === action.payload.id)
             state[index].entityStatus = action.payload.entityStatus
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchTodolistThunk.fulfilled, (state, action) => {
+        builder.addCase(fetchTodolist.fulfilled, (state, action) => {
             return action.payload.todoLists.map(tl => ({...tl, filter: 'all', entityStatus: "idle"}))
         })
-        builder.addCase(removeTodoListThunk.fulfilled, (state, action) => {
+        builder.addCase(removeTodoList.fulfilled, (state, action) => {
             const index = state.findIndex(tl => tl.id === action.payload.todoListId)
             if (index > -1) {
                 state.splice(index, 1)
             }
         })
-        builder.addCase(addTodoListThunk.fulfilled, (state, action) => {
+        builder.addCase(addTodoList.fulfilled, (state, action) => {
             state.unshift({...action.payload.todoList, filter: 'all', entityStatus: "idle"})
         })
-        builder.addCase(changeTodoListTitleThunk.fulfilled, (state, action) => {
+        builder.addCase(changeTodoListTitle.fulfilled, (state, action) => {
             const index = state.findIndex(tl => tl.id === action.payload.todoListId)
             state[index].title = action.payload.title
         })
@@ -39,7 +39,7 @@ const slice = createSlice({
 })
 
 export const {
-    changeTodoListFilterAC, changeTodoListEntityStatusAC
+    changeTodoListFilter, changeTodoListEntityStatus
 } = slice.actions
 
 export const todoListsReducer = slice.reducer

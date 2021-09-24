@@ -3,10 +3,10 @@ import {setAppErrorAC, setAppStatusAC} from "../../app/app-reducer";
 import {todolistApi} from "../../api/todolist-api";
 import {AxiosError} from "axios";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
-import {changeTodoListEntityStatusAC} from "./todolists-reducer";
+import {changeTodoListEntityStatus} from "./todolists-reducer";
 
-export const fetchTodolistThunk = createAsyncThunk
-('todoLists/fetchTodoList', async (param, {dispatch, rejectWithValue}) => {
+export const fetchTodolist = createAsyncThunk
+('todoLists/fetchTodoList', async ({}, {dispatch, rejectWithValue}) => {
     dispatch(setAppStatusAC({status: 'loading'}))
     try {
         const data = await todolistApi.getTodo()
@@ -19,11 +19,11 @@ export const fetchTodolistThunk = createAsyncThunk
         return rejectWithValue({})
     }
 })
-export const removeTodoListThunk = createAsyncThunk
+export const removeTodoList = createAsyncThunk
 ('todoLists/removeTodoList', async (param: { todoListId: string }, {dispatch, rejectWithValue}) => {
     dispatch(setAppStatusAC({status: 'loading'}))
     try {
-        dispatch(changeTodoListEntityStatusAC({id: param.todoListId, entityStatus: 'loading'}))
+        dispatch(changeTodoListEntityStatus({id: param.todoListId, entityStatus: 'loading'}))
         const data = await todolistApi.deleteTodo(param.todoListId)
 
         if (data.resultCode === 0) {
@@ -38,11 +38,11 @@ export const removeTodoListThunk = createAsyncThunk
         return rejectWithValue(null)
     }
 })
-export const addTodoListThunk = createAsyncThunk
-('todoLists/addTodoList', async (param: { title: string }, {dispatch, rejectWithValue}) => {
+export const addTodoList = createAsyncThunk
+('todoLists/addTodoList', async (title: string , {dispatch, rejectWithValue}) => {
     dispatch(setAppStatusAC({status: 'loading'}))
     try {
-        const data = await todolistApi.createTodo(param.title)
+        const data = await todolistApi.createTodo(title)
         if (data.resultCode === 0) {
             dispatch(setAppStatusAC({status: 'succeeded'}))
             return {todoList: data.data.item}
@@ -60,7 +60,7 @@ export const addTodoListThunk = createAsyncThunk
         return rejectWithValue(null)
     }
 })
-export const changeTodoListTitleThunk = createAsyncThunk
+export const changeTodoListTitle = createAsyncThunk
 ('todoLists/updateTodoList', async (param: { todoListId: string, title: string }, {dispatch, rejectWithValue}) => {
     dispatch(setAppStatusAC({status: 'loading'}))
     try {
