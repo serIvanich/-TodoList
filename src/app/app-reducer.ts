@@ -1,5 +1,4 @@
-import {Dispatch} from "redux"
-import {authApi, FieldErrorType, LoginRequestType} from "../api/todolist-api";
+import {authApi} from "../api/todolist-api";
 import {setIsLoggedInAC} from "../features/auth/auth-reduser";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
@@ -60,6 +59,10 @@ const slice = createSlice({
     }
 })
 
+export const {setAppStatusAC, setAppErrorAC} = slice.actions
+
+export const appReducer = slice.reducer
+
 // export const appReducer = (state: AppInitialStateType = initialState, action: AppActionsType): AppInitialStateType => {
 //     switch (action.type) {
 //         case 'APP/SET-STATUS':
@@ -78,7 +81,7 @@ const slice = createSlice({
 // export const setAppErrorAC = (error: string | null) => ({type: 'APP/SET-ERROR', error} as const)
 // export const setIsInitializedAC = (isInitialized: boolean) => ({type: 'APP/SET-IS-INITIALIZED', isInitialized} as const)
 
-export const {setAppStatusAC, setAppErrorAC} = slice.actions
+
 
 // thunk
 
@@ -108,4 +111,3 @@ export const {setAppStatusAC, setAppErrorAC} = slice.actions
 
 // export type AppActionsType = SetAppStatusActionType | SetAppErrorActionType | SetIsInitializedAC
 
-export const appReducer = slice.reducer
