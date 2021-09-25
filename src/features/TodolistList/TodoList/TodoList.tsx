@@ -10,7 +10,7 @@ import {AppRootStateType, useActions} from "../../../app/store";
 import {TasksStatuses, TasksType} from "../../../api/todolist-api";
 import {TodolistDomainType} from "../todolists-reducer";
 import Task from "./Task/Task";
-import {fetchTasks} from "../tasks-actions";
+
 import {tasksActions, todoListActions} from "../index";
 
 
@@ -21,7 +21,7 @@ type TodoListPropsType = {
 }
 
 export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, ...props}) => {
-
+debugger
     let tasksForTodolist = props.tasks
     if (props.todoList.filter === 'active') {
         tasksForTodolist = props.tasks.filter(t => t.status === TasksStatuses.New)
@@ -30,7 +30,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
         tasksForTodolist = props.tasks.filter(t => t.status === TasksStatuses.Completed);
     }
     const {changeTodoListFilter, removeTodoList, changeTodoListTitle} = useActions(todoListActions)
-    const {addTask, updateTask, removeTask} = useActions(tasksActions)
+    const {addTask, updateTask, removeTask, fetchTasks} = useActions(tasksActions)
 
     const todo = useSelector<AppRootStateType>((state =>
         state.todoLists.filter(t => t.id === props.todoList.id)[0]))
@@ -41,6 +41,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
         if (demo) {
             return;
         }
+        debugger
         dispatch(fetchTasks({todoListId: props.todoList.id}))
     }, [])
 

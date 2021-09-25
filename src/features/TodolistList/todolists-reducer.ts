@@ -5,10 +5,11 @@ import {AxiosError} from "axios";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 
 
-const fetchTodolist = createAsyncThunk
-('todoLists/fetchTodoList', async ({}, {dispatch, rejectWithValue}) => {
+const fetchTodolist = createAsyncThunk('todoLists/fetchTodoList', async ({}, {dispatch, rejectWithValue}) => {
     dispatch(setAppStatusAC({status: 'loading'}))
+
     try {
+        debugger
         const data = await todolistApi.getTodo()
         dispatch(setAppStatusAC({status: 'succeeded'}))
         return {todoLists: data}
@@ -101,6 +102,7 @@ export const slice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchTodolist.fulfilled, (state, action) => {
+            debugger
             return action.payload.todoLists.map(tl => ({...tl, filter: 'all', entityStatus: "idle"}))
         })
         builder.addCase(removeTodoList.fulfilled, (state, action) => {
@@ -143,7 +145,7 @@ export type TodolistDomainType = TodolistType & {
 //     state: InitialStateType = initialState, action: TodoListActionType): InitialStateType => {
 //     switch (action.type) {
 //
-//         case "SET-TODOLISTS":
+//         case "SET-TODOLIST":
 //
 //
 //         case 'REMOVE-TODOLIST':
@@ -170,7 +172,7 @@ export type TodolistDomainType = TodolistType & {
 
 //
 // export const setTodosAC = (todoLists: TodolistType[]) =>
-//     ({type: 'SET-TODOLISTS', todoLists} as const)
+//     ({type: 'SET-TODOLIST', todoLists} as const)
 // export const removeTodoListAC = (todoListID: string) =>
 //     ({type: 'REMOVE-TODOLIST', todoListID} as const)
 // export const addTodoListAC = (todoList: TodolistType) =>

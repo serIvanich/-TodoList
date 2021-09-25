@@ -112,10 +112,10 @@ const slice = createSlice({
                 state[tl.id] = []
             })
         })
-        builder.addCase(fetchTasks.fulfilled, (state, action) => {
+        builder.addCase(asyncActions.fetchTasks.fulfilled, (state, action) => {
             state[action.payload.todoListId] = action.payload.tasks
         })
-        builder.addCase(removeTask.fulfilled, (state, action) => {
+        builder.addCase(asyncActions.removeTask.fulfilled, (state, action) => {
             const tasks = state[action.payload.todolistId]
             //@ts-ignore
             const index = tasks.findIndex(t => t.id === action.payload.taskID)

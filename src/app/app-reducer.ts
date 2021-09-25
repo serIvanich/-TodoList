@@ -11,7 +11,7 @@ export type AppInitialStateType = {
     isInitialized: boolean
 }
 
-export const initializeAppTC = createAsyncThunk
+const initializeAppTC = createAsyncThunk
 ('app/initializeApp', async (param, {dispatch}) => {
     dispatch(setAppStatusAC({status: 'loading'}))
     try {
@@ -19,7 +19,7 @@ export const initializeAppTC = createAsyncThunk
         if (data.resultCode === 0) {
             dispatch(setIsLoggedInAC({value: true}))
 
-            return
+
 
         } else {
 
@@ -33,6 +33,9 @@ export const initializeAppTC = createAsyncThunk
     }
 })
 
+export const asyncActions = {
+    initializeAppTC
+}
 
 const slice = createSlice({
     name: 'app',
@@ -54,6 +57,7 @@ const slice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(initializeAppTC.fulfilled, (state) => {
+            debugger
             state.isInitialized = true
         })
     }

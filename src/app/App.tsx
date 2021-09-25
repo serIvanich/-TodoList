@@ -1,19 +1,25 @@
 import React, {useEffect} from 'react'
 import './App.css'
-import {AppBar, Button, CircularProgress, Container, IconButton, Toolbar, Typography} from "@material-ui/core";
+import {
+    AppBar,
+    Button,
+    CircularProgress,
+    Container,
+    IconButton,
+    LinearProgress,
+    Toolbar,
+    Typography
+} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
-import {TodolistList} from "../features/TodolistList/TodolistList";
-import LinearProgress from '@material-ui/core/LinearProgress/LinearProgress';
+import {TodolistList} from "../features/TodolistList";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
-import {initializeAppTC, RequestStatusType} from "./app-reducer";
+import {asyncActions} from "./app-reducer";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
-import {Login} from "../features/auth/Login";
+import {authSelectors, Login} from "../features/auth";
 import {Redirect, Route, Switch} from 'react-router-dom';
 import {logoutTC} from "../features/auth/auth-reduser";
-import { selectorInitialized, selectorStatus } from './selectors';
 import {appSelectors} from "./index";
-import {authSelectors} from "../features/auth";
 
 
 type PropsType = {
@@ -24,7 +30,10 @@ type PropsType = {
 
 
 export const selectorTasks = (state: AppRootStateType) => state.tasks
-export const selectorTodoLists = (state: AppRootStateType) => state.todoLists
+export const selectorTodoLists = (state: AppRootStateType) => {
+    debugger
+    return state.todoLists
+}
 
 
 const App: React.FC<PropsType> = ({demo = false}) => {
@@ -37,7 +46,8 @@ const App: React.FC<PropsType> = ({demo = false}) => {
 
     useEffect(() => {
         if (!demo) {
-            dispatch(initializeAppTC())
+
+            dispatch(asyncActions.initializeAppTC())
         }
     }, [])
 
