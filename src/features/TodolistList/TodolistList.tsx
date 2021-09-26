@@ -24,11 +24,11 @@ export const TodolistList: React.FC<PropsType> = ({demo = false}) => {
     const dispatch = useDispatch()
     useEffect(() => {
         if (demo || !isLoggedIn) {
-            debugger
+
             return;
         }
-        debugger
-         fetchTodolist()
+
+        fetchTodolist({})
     }, [])
 
 

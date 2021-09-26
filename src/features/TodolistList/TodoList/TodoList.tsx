@@ -1,16 +1,12 @@
 import React, {useCallback, useEffect} from 'react'
-
 import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import {Button, IconButton} from "@material-ui/core";
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType, useActions} from "../../../app/store";
-
+import {useActions} from "../../../app/store";
 import {TasksStatuses, TasksType} from "../../../api/todolist-api";
 import {TodolistDomainType} from "../todolists-reducer";
 import Task from "./Task/Task";
-
 import {tasksActions, todoListActions} from "../index";
 
 
@@ -21,7 +17,7 @@ type TodoListPropsType = {
 }
 
 export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, ...props}) => {
-debugger
+
     let tasksForTodolist = props.tasks
     if (props.todoList.filter === 'active') {
         tasksForTodolist = props.tasks.filter(t => t.status === TasksStatuses.New)
@@ -32,17 +28,16 @@ debugger
     const {changeTodoListFilter, removeTodoList, changeTodoListTitle} = useActions(todoListActions)
     const {addTask, updateTask, removeTask, fetchTasks} = useActions(tasksActions)
 
-    const todo = useSelector<AppRootStateType>((state =>
-        state.todoLists.filter(t => t.id === props.todoList.id)[0]))
-
-    const dispatch = useDispatch()
+    // const todo = useSelector<AppRootStateType>((state =>
+    //     state.todoLists.filter(t => t.id === props.todoList.id)[0]))
+    //
+    // const dispatch = useDispatch()
 
     useEffect(() => {
         if (demo) {
             return;
         }
-        debugger
-        dispatch(fetchTasks({todoListId: props.todoList.id}))
+        fetchTasks({todoListId: props.todoList.id})
     }, [])
 
     const changeTaskStatus = useCallback((taskId: string, status: TasksStatuses, todoListId: string) => {

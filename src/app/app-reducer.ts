@@ -57,7 +57,6 @@ const slice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(initializeAppTC.fulfilled, (state) => {
-            debugger
             state.isInitialized = true
         })
     }

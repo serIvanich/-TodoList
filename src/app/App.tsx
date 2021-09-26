@@ -30,7 +30,6 @@ type PropsType = {
 
 export const selectorTasks = (state: AppRootStateType) => state.tasks
 export const selectorTodoLists = (state: AppRootStateType) => {
-    debugger
     return state.todoLists
 }
 

@@ -2,7 +2,7 @@ import React from 'react'
 import {Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField} from '@material-ui/core'
 import {FormikHelpers, useFormik} from 'formik';
 import {useSelector} from "react-redux";
-import {useAppDispatch} from "../../app/store";
+import {useActions, useAppDispatch} from "../../app/store";
 import {Redirect} from "react-router-dom";
 import {selectorLoggedIn} from "./selectors";
 import {authActions} from "./index";
@@ -10,6 +10,8 @@ import {authActions} from "./index";
 
 export const Login = () => {
     const dispatch = useAppDispatch()
+
+
 
     const isLoggedIn = useSelector(selectorLoggedIn)
 

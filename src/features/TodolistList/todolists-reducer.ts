@@ -5,11 +5,11 @@ import {AxiosError} from "axios";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 
 
-const fetchTodolist = createAsyncThunk('todoLists/fetchTodoList', async ({}, {dispatch, rejectWithValue}) => {
+const fetchTodolist = createAsyncThunk('todoLists/fetchTodoList', async (param: {}, {dispatch, rejectWithValue}) => {
     dispatch(setAppStatusAC({status: 'loading'}))
 
     try {
-        debugger
+
         const data = await todolistApi.getTodo()
         dispatch(setAppStatusAC({status: 'succeeded'}))
         return {todoLists: data}
@@ -102,7 +102,6 @@ export const slice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchTodolist.fulfilled, (state, action) => {
-            debugger
             return action.payload.todoLists.map(tl => ({...tl, filter: 'all', entityStatus: "idle"}))
         })
         builder.addCase(removeTodoList.fulfilled, (state, action) => {

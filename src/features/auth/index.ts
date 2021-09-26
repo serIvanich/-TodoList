@@ -4,7 +4,7 @@ import {asyncActions, slice} from "./auth-reduser";
 
 const authActions = {
     ...asyncActions,
-    slice
+    ...slice.actions,
 }
 export {
     authSelectors,
