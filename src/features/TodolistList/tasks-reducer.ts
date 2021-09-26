@@ -25,6 +25,7 @@ const removeTask = createAsyncThunk('tasks/removeTask',
         thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
         try {
             const res = await tasksApi.deleteTask(param.todolistId, param.taskId)
+            if(res)
             thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
             return param
         } catch (e) {
@@ -117,8 +118,7 @@ const slice = createSlice({
         })
         builder.addCase(asyncActions.removeTask.fulfilled, (state, action) => {
             const tasks = state[action.payload.todolistId]
-            //@ts-ignore
-            const index = tasks.findIndex(t => t.id === action.payload.taskID)
+            const index = tasks.findIndex(t => t.id === action.payload.taskId)
             if (index > -1) {
                 tasks.splice(index, 1)
             }

@@ -48,13 +48,9 @@ const addTodoList = createAsyncThunk
             dispatch(setAppStatusAC({status: 'succeeded'}))
             return {todoList: data.data.item}
         } else {
-            if (data.messages.length) {
-                dispatch(setAppErrorAC({error: data.messages[0]}))
-            } else {
-                dispatch(setAppErrorAC({error: 'Some error occurred'}))
-            }
-            dispatch(setAppStatusAC({status: 'failed'}))
+            handleServerAppError(data, dispatch)
             return rejectWithValue(null)
+
         }
     } catch (e) {
         handleServerNetworkError(e.message, dispatch)
