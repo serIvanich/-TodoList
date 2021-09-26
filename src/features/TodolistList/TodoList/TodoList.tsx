@@ -80,6 +80,18 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
     const onCompletedClickHandler = useCallback(() =>
         changeTodoListFilter({value: 'completed', todoListId: props.todoList.id}), [props.todoList.filter])
 
+    const renderFilterButton = (onClick: () => void, selectedFilter: FilterValuesType,
+                                buttonFilter: FilterValuesType, color: PropTypes.Color, text: string) => {
+        return <>
+            <Button
+                style={{marginLeft: '3px'}}
+                size={"small"}
+                variant={selectedFilter === buttonFilter ? "contained" : "outlined"}
+                color={color}
+                onClick={onClick}>{text}
+            </Button>
+        </>
+    }
 
     return (
         <div>
@@ -96,24 +108,19 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
                 {tasks}
             </ul>
             <div>
-                <FilterButton
-                    selectedFilter={props.todoList.filter}
-                    buttonFilter='all'
-                    color={'primary'}
-                    onClick={onAllClickHandler}>All
-                </FilterButton>
-                <FilterButton
-                    selectedFilter={props.todoList.filter}
-                    buttonFilter='active'
-                    color={'primary'}
-                    onClick={onActiveClickHandler}>Active
-                </FilterButton>
-                <FilterButton
-                    selectedFilter={props.todoList.filter}
-                    buttonFilter='completed'
-                    color={'primary'}
-                    onClick={onCompletedClickHandler}>Completed
-                </FilterButton>
+                {
+                    renderFilterButton(onAllClickHandler, props.todoList.filter,
+                        'all', 'primary', 'All')
+                }
+                {
+                    renderFilterButton(onActiveClickHandler, props.todoList.filter,
+                        'active', 'primary', 'Active')
+                }
+                {
+                    renderFilterButton(onCompletedClickHandler, props.todoList.filter,
+                        'completed', 'primary', 'Completed')
+                }
+
             </div>
         </div>
 
@@ -127,16 +134,16 @@ type FilterButtonPropsType = {
     color: PropTypes.Color
 }
 
-const FilterButton: React.FC<FilterButtonPropsType> = (
-    {onClick, selectedFilter, buttonFilter, color }) => {
-    return <>
-        <Button
-            style={{marginLeft: '3px'}}
-            size={"small"}
-            variant={selectedFilter === buttonFilter ? "contained" : "outlined"}
-            color={color}
-            onClick={onClick}>Active
-        </Button>
-    </>
-}
+// const FilterButton: React.FC<FilterButtonPropsType> = (
+//     {onClick, selectedFilter, buttonFilter, color}) => {
+//     return <>
+//         <Button
+//             style={{marginLeft: '3px'}}
+//             size={"small"}
+//             variant={selectedFilter === buttonFilter ? "contained" : "outlined"}
+//             color={color}
+//             onClick={onClick}>Active
+//         </Button>
+//     </>
+// }
 
