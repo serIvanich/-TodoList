@@ -16,9 +16,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
 import {asyncActions} from "./app-reducer";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
-import {authSelectors, Login} from "../features/auth";
+import {authActions, authSelectors, Login} from "../features/auth";
 import {Redirect, Route, Switch} from 'react-router-dom';
-import {logoutTC} from "../features/auth/auth-reduser";
 import {appSelectors} from "./index";
 
 
@@ -52,7 +51,7 @@ const App: React.FC<PropsType> = ({demo = false}) => {
     }, [])
 
     const logoutHandler = () => {
-        dispatch(logoutTC())
+        dispatch(authActions.logoutTC())
     }
     if (!isInitialized) {
         return <div

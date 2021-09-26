@@ -4,7 +4,7 @@ import {handleServerAppError, handleServerNetworkError} from "../../utils/error-
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {AxiosError} from 'axios';
 
-export const loginTC = createAsyncThunk<undefined, LoginRequestType,
+const loginTC = createAsyncThunk<undefined, LoginRequestType,
     { rejectValue: { errors: Array<string>, fieldsErrors?: Array<FieldErrorType> } }>
 ('auth/login', async (param, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
@@ -28,7 +28,7 @@ export const loginTC = createAsyncThunk<undefined, LoginRequestType,
 })
 
 
-export const logoutTC = createAsyncThunk
+const logoutTC = createAsyncThunk
 ('auth/logout', async (param, thunkAPI) => {
     try {
         thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
@@ -49,7 +49,12 @@ export const logoutTC = createAsyncThunk
 })
 
 
-const slice = createSlice({
+export const asyncActions = {
+    loginTC,
+    logoutTC,
+}
+
+export const slice = createSlice({
     name: 'auth',
     initialState: {
         isLoggedIn: false
