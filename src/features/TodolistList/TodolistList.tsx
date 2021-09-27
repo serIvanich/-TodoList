@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useCallback, useEffect} from 'react'
 import './../../app/App.css'
 
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
@@ -22,6 +22,11 @@ export const TodolistList: React.FC<PropsType> = ({demo = false}) => {
     const isLoggedIn = useSelector(authSelectors.selectorLoggedIn)
     const {fetchTodolist, addTodoList} = useActions(todoListActions)
     const dispatch = useDispatch()
+
+    const addTodolistCallback = useCallback(async (title: string) => {
+        addTodoList(title)
+    }, [])
+
     useEffect(() => {
         if (demo || !isLoggedIn) {
 
@@ -57,7 +62,7 @@ export const TodolistList: React.FC<PropsType> = ({demo = false}) => {
 
     return <>
         <Grid container style={{padding: '20px 0'}}>
-            <AddItemForm addItem={addTodoList}/>
+            <AddItemForm addItem={addTodolistCallback}/>
         </Grid>
         <Grid container spacing={3} style={{flexWrap: 'nowrap', overflowX: 'scroll'}}>
             {todoListComponents}

@@ -3,8 +3,8 @@ import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import {Button, IconButton, PropTypes} from "@material-ui/core";
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import {useActions} from "../../../app/store";
-import {TasksStatuses, TasksType} from "../../../api/todolist-api";
+import {useActions, useAppDispatch} from "../../../app/store";
+import {FieldErrorType, TasksStatuses, TasksType} from "../../../api/todolist-api";
 import {FilterValuesType, TodolistDomainType} from "../todolists-reducer";
 import Task from "./Task/Task";
 import {tasksActions, todoListActions} from "../index";
@@ -28,6 +28,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
     const {changeTodoListFilter, removeTodoList, changeTodoListTitle} = useActions(todoListActions)
     const {addTask, fetchTasks} = useActions(tasksActions)
 
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         if (demo) {
@@ -51,8 +52,18 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
     }, [removeTodoList, props.todoList.id])
 
 
-    const addTaskCallback = useCallback((title: string) => {
-        addTask({title, todoListId: props.todoList.id})
+    const addTaskCallback = useCallback(async(title: string) => {
+        let thunk = addTask({title, todoListId: props.todoList.id})
+        const resultAction = await dispatch(thunk)
+        if (addTask.rejected.match(resultAction)) {
+            if (resultAction.payload?.fieldsErrors?.length) {
+                const errorMessage = resultAction.payload.fieldsErrors[0]
+                throw new Error(errorMessage.error)
+            } else {
+                throw new Error('Some error occured')
+            }
+        }
+
     }, [props.todoList.id])
 
     const changeTodoListTitleCallback = useCallback((title: string) => {

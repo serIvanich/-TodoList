@@ -1,11 +1,9 @@
-import React, {useState, KeyboardEvent, ChangeEvent} from 'react'
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react'
 import {IconButton, TextField} from "@material-ui/core";
 import {AddBox} from "@material-ui/icons";
-import {AsyncThunk} from "@reduxjs/toolkit";
-import { TodolistType } from '../../api/todolist-api';
 
 export type AddItemFormPropsType = {
-    addItem: (title: string) => void
+    addItem: (title: string) => Promise<any>
     disabled?: boolean
 }
 
@@ -17,15 +15,18 @@ export const AddItemForm = React.memo(({addItem, disabled = false}: AddItemFormP
         setTitle(e.currentTarget.value)
 
     }
-    const onClickAddItem = () => {
-        const trimmedTitle = title.trim()
-        if (trimmedTitle) {
-            addItem(trimmedTitle)
+    const onClickAddItem = async () => {
+        if (title.trim() !== '') {
+            try {
+                await addItem(title)
+                setTitle('')
+            } catch (e) {
+                setError(e.error)
+            }
         } else {
             setError('Title is requeired')
         }
 
-        setTitle('')
     }
     const onKeyPressAddItem = (e: KeyboardEvent<HTMLInputElement>) => {
         if (error !== null) {

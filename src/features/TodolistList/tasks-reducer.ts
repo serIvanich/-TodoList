@@ -1,9 +1,10 @@
-import {tasksApi, TasksStatuses, TasksType} from "../../api/todolist-api";
+import {FieldErrorType, tasksApi, TasksStatuses, TasksType} from "../../api/todolist-api";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {setAppStatusAC} from "../../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {AppRootStateType} from "../../app/store";
 import {asyncActions as asyncTodoListActions} from "./todolists-reducer";
+import {AxiosError} from "axios";
 
 
 const fetchTasks = createAsyncThunk('tasks/fetchTasks',
@@ -34,8 +35,10 @@ const removeTask = createAsyncThunk('tasks/removeTask',
         }
 
     })
-const addTask = createAsyncThunk('tasks/addTask',
-    async (param: { title: string, todoListId: string}, {dispatch, rejectWithValue}) => {
+const addTask = createAsyncThunk<TasksType, {title: string, todoListId: string},
+    {rejectValue: {errors: Array<string>, fieldsErrors?: Array<FieldErrorType>}}>('tasks/addTask',
+    async (param,
+           {dispatch, rejectWithValue}) => {
         dispatch(setAppStatusAC({status: 'loading'}))
         try {
             const data = await tasksApi.createTask(param.todoListId, param.title)
@@ -45,12 +48,13 @@ const addTask = createAsyncThunk('tasks/addTask',
                 dispatch(setAppStatusAC({status: 'succeeded'}))
                 return data.data.item
             } else {
-                handleServerAppError(data, dispatch)
-                return rejectWithValue({})
+                handleServerAppError(data, dispatch, false)
+                return rejectWithValue({errors: data.messages, fieldsErrors: data.fieldsErrors})
             }
         } catch (e) {
-            handleServerNetworkError(e.message, dispatch)
-            return rejectWithValue({})
+            const err: AxiosError = e
+            handleServerNetworkError(err.message, dispatch, false)
+            return rejectWithValue({errors: [err.message], fieldsErrors: undefined})
         }
     })
 const updateTask = createAsyncThunk
