@@ -13,7 +13,6 @@ export const AddItemForm = React.memo(({addItem, disabled = false}: AddItemFormP
 
     const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
-
     }
     const onClickAddItem = async () => {
         if (title.trim() !== '') {
@@ -21,25 +20,21 @@ export const AddItemForm = React.memo(({addItem, disabled = false}: AddItemFormP
                 await addItem(title)
                 setTitle('')
             } catch (e) {
-                setError(e.error)
+                setError(e.message)
             }
         } else {
-            setError('Title is requeired')
+            setError('Title is required')
         }
-
     }
     const onKeyPressAddItem = (e: KeyboardEvent<HTMLInputElement>) => {
         if (error !== null) {
             setError(null)
         }
 
-
         if (e.key === 'Enter') {
             onClickAddItem()
         }
     }
-
-
 
         return (
             <div>
@@ -55,7 +50,6 @@ export const AddItemForm = React.memo(({addItem, disabled = false}: AddItemFormP
                     helperText={error}
 
                 />
-
 
 
                 <IconButton onClick={onClickAddItem} color={"primary"} disabled={disabled}>

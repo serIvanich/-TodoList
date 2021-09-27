@@ -53,18 +53,18 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
 
 
     const addTaskCallback = useCallback(async(title: string) => {
-        let thunk = addTask({title, todoListId: props.todoList.id})
+        let thunk = tasksActions.addTask({title: title, todoListId: props.todoList.id})
         const resultAction = await dispatch(thunk)
-        if (addTask.rejected.match(resultAction)) {
-            if (resultAction.payload?.fieldsErrors?.length) {
-                const errorMessage = resultAction.payload.fieldsErrors[0]
-                throw new Error(errorMessage.error)
+        if (tasksActions.addTask.rejected.match(resultAction)) {
+            if (resultAction.payload?.errors?.length) {
+                const errorMessage = resultAction.payload.errors[0]
+                throw new Error(errorMessage)
             } else {
-                throw new Error('Some error occured')
+                throw new Error('Some error occurred')
             }
         }
 
-    }, [props.todoList.id])
+    }, [])
 
     const changeTodoListTitleCallback = useCallback((title: string) => {
         changeTodoListTitle({title, todoListId: props.todoList.id})
