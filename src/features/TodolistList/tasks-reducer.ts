@@ -43,8 +43,6 @@ const addTask = createAsyncThunk<TasksType, {title: string, todoListId: string},
         try {
             const data = await tasksApi.createTask(param.todoListId, param.title)
             if (data.resultCode === 0) {
-                // const task = data.data.item
-                // dispatch(addTaskAC(task))
                 dispatch(setAppStatusAC({status: 'succeeded'}))
                 return data.data.item
             } else {

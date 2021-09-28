@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react'
-import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
+import {AddItemFDormSubmitHelperType, AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import {Button, IconButton, PropTypes} from "@material-ui/core";
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
@@ -52,19 +52,22 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
     }, [removeTodoList, props.todoList.id])
 
 
-    const addTaskCallback = useCallback(async(title: string) => {
+    const addTaskCallback = useCallback(async(title: string, helper: AddItemFDormSubmitHelperType) => {
         let thunk = tasksActions.addTask({title: title, todoListId: props.todoList.id})
         const resultAction = await dispatch(thunk)
-        if (tasksActions.addTask.rejected.match(resultAction)) {
+        if (tasksActions.addTask.rejected.match(resultAction )) {
             if (resultAction.payload?.errors?.length) {
                 const errorMessage = resultAction.payload.errors[0]
-                throw new Error(errorMessage)
+                helper.setError(errorMessage)
+
             } else {
-                throw new Error('Some error occurred')
+                helper.setError('Some error occurred')
             }
+        } else {
+            helper.setTitle('')
         }
 
-    }, [])
+    }, [props.todoList.id])
 
     const changeTodoListTitleCallback = useCallback((title: string) => {
         changeTodoListTitle({title, todoListId: props.todoList.id})

@@ -2,8 +2,14 @@ import React, {ChangeEvent, KeyboardEvent, useState} from 'react'
 import {IconButton, TextField} from "@material-ui/core";
 import {AddBox} from "@material-ui/icons";
 
+export type AddItemFDormSubmitHelperType = {
+    setError: (error: string) => void,
+    setTitle: (title: string) => void
+}
+
 export type AddItemFormPropsType = {
-    addItem: (title: string) => Promise<any>
+    addItem: (title: string,
+              helper: AddItemFDormSubmitHelperType) => Promise<void>
     disabled?: boolean
 }
 
@@ -14,14 +20,9 @@ export const AddItemForm = React.memo(({addItem, disabled = false}: AddItemFormP
     const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
     }
-    const onClickAddItem = async () => {
+    const addItemHandler = async () => {
         if (title.trim() !== '') {
-            try {
-                await addItem(title)
-                setTitle('')
-            } catch (e) {
-                setError(e.message)
-            }
+            addItem(title, {setError, setTitle})
         } else {
             setError('Title is required')
         }
@@ -32,7 +33,7 @@ export const AddItemForm = React.memo(({addItem, disabled = false}: AddItemFormP
         }
 
         if (e.key === 'Enter') {
-            onClickAddItem()
+            addItemHandler()
         }
     }
 
@@ -52,7 +53,7 @@ export const AddItemForm = React.memo(({addItem, disabled = false}: AddItemFormP
                 />
 
 
-                <IconButton onClick={onClickAddItem} color={"primary"} disabled={disabled}>
+                <IconButton onClick={addItemHandler} color={"primary"} disabled={disabled}>
 
                     <AddBox/>
                 </IconButton>
