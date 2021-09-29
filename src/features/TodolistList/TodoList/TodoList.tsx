@@ -4,7 +4,7 @@ import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import {Button, IconButton, PropTypes} from "@material-ui/core";
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import {useActions, useAppDispatch} from "../../../app/store";
-import {FieldErrorType, TasksStatuses, TasksType} from "../../../api/todolist-api";
+import {TasksStatuses, TasksType} from "../../../api/todolist-api";
 import {FilterValuesType, TodolistDomainType} from "../todolists-reducer";
 import Task from "./Task/Task";
 import {tasksActions, todoListActions} from "../index";
@@ -26,7 +26,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
         tasksForTodolist = props.tasks.filter(t => t.status === TasksStatuses.Completed);
     }
     const {changeTodoListFilter, removeTodoList, changeTodoListTitle} = useActions(todoListActions)
-    const {addTask, fetchTasks} = useActions(tasksActions)
+    const {fetchTasks} = useActions(tasksActions)
 
     const dispatch = useAppDispatch()
 
@@ -91,8 +91,8 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
     return (
         <div style={{position: 'relative'}}>
             <IconButton onClick={onClickTodoList} disabled={props.todoList.entityStatus === 'loading'}
-                        style={{position: 'absolute', right: '-16px', top: '-6px', color: 'maroon'}}>
-                <DeleteOutlinedIcon/>
+                        style={{position: 'absolute', right: '-16px', top: '-6px', color: 'maroon'}} size={'small'}>
+                <DeleteOutlinedIcon fontSize={'small'}/>
             </IconButton>
 
             <h3 >

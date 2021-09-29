@@ -1,18 +1,24 @@
-import {asyncActions as tasksAsyncActions} from './tasks-reducer'
-import {asyncActions as todoListAsyncActions, slice} from './todolists-reducer'
+import {asyncActions as tasksAsyncActions, slice as tasksSlice} from './tasks-reducer'
+import {asyncActions as todoListAsyncActions, slice as todoListsSlice} from './todolists-reducer'
 import {TodolistList} from './TodolistList'
 
 const todoListActions = {
     ...todoListAsyncActions,
-    ...slice.actions
+    ...todoListsSlice.actions
 }
 
 const tasksActions = {
-    ...tasksAsyncActions
+    ...tasksAsyncActions,
+    ...tasksSlice.actions
 }
+
+const todoListsReducer = todoListsSlice.reducer
+const tasksReducer = tasksSlice.reducer
 
 export {
     tasksActions,
     todoListActions,
     TodolistList,
+    todoListsReducer,
+    tasksReducer,
 }

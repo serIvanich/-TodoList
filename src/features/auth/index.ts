@@ -6,9 +6,13 @@ const authActions = {
     ...asyncActions,
     ...slice.actions,
 }
+
+const authReducer = slice.reducer
+
 export {
     authSelectors,
     Login,
-    authActions
+    authActions,
+    authReducer,
 }
 

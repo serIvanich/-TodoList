@@ -1,8 +1,7 @@
 import {setAppStatusAC} from '../../app/app-reducer'
 import {authApi, FieldErrorType, LoginRequestType} from "../../api/todolist-api";
-import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
+import {handleAsyncServerNetworkError, handleServerAppError} from "../../utils/error-utils";
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {AxiosError} from 'axios';
 
 const loginTC = createAsyncThunk<undefined, LoginRequestType,
     { rejectValue: { errors: Array<string>, fieldsErrors?: Array<FieldErrorType> } }>
@@ -21,9 +20,8 @@ const loginTC = createAsyncThunk<undefined, LoginRequestType,
             return thunkAPI.rejectWithValue({errors: data.messages, fieldsErrors: data.fieldsErrors})
         }
     } catch (e) {
-        const error: AxiosError = e
-        handleServerNetworkError(error.message, thunkAPI.dispatch)
-        return thunkAPI.rejectWithValue({errors: [error.message], fieldsErrors: undefined})
+        return handleAsyncServerNetworkError(e, thunkAPI)
+
     }
 })
 
@@ -43,7 +41,7 @@ const logoutTC = createAsyncThunk
         }
     } catch (e) {
 
-        handleServerNetworkError(e.message, thunkAPI.dispatch)
+        handleAsyncServerNetworkError(e, thunkAPI)
         return thunkAPI.rejectWithValue({})
     }
 })
@@ -76,7 +74,7 @@ export const slice = createSlice({
 
 export const {setIsLoggedInAC} = slice.actions
 
-export default slice.reducer
+
 
 // export const authReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
 //     switch (action.type) {
