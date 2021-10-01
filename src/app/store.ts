@@ -1,21 +1,21 @@
-import {tasksReducer} from '../features/TodolistList';
-import {todoListsReducer} from '../features/TodolistList';
+import {tasksReducer, todoListsReducer} from '../features/TodolistList';
 import {ActionCreatorsMapObject, bindActionCreators, combineReducers} from 'redux';
 import thunk, {ThunkAction} from 'redux-thunk';
 import {appReducer} from "./app-reducer";
 import {authReducer} from "../features/auth";
 import {configureStore} from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {useMemo} from "react";
 import {FieldErrorType} from "../api/todolist-api";
 
 // объединяя reducer-ы с помощью combineReducers,
 // мы задаём структуру нашего единственного объекта-состояния
 const rootReducer = combineReducers({
-    tasks: tasksReducer,
-    todoLists: todoListsReducer,
     app: appReducer,
-    auth: authReducer
+    auth: authReducer,
+    todoLists: todoListsReducer,
+    tasks: tasksReducer,
+
 })
 // непосредственно создаём state
 // export const store = createStore(rootReducer, applyMiddleware(thunk));
@@ -47,4 +47,4 @@ export function useActions<T extends ActionCreatorsMapObject<any>>(actions: T) {
     return boundActions
 }
 
-export type ThunkError = {rejectValue: {errors: Array<string>, fieldsErrors?: Array<FieldErrorType>}}
+export type ThunkError = { rejectValue: { errors: Array<string>, fieldsErrors?: Array<FieldErrorType> } }

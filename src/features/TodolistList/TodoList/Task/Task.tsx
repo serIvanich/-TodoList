@@ -25,7 +25,7 @@ const Task: React.FC<TaskPropsType> = React.memo(({task, todoId}) => {
     const onChangeTaskTitle = useCallback((newTitle: string) => {
         updateTask({todoListId: todoId, taskId: task.id, model: {title: newTitle}})
     }, [task, todoId])
-    const onRemoveTask = useCallback(() => removeTask({taskId: task.id, todolistId: todoId}),
+    const onRemoveTask = useCallback(() => removeTask({taskId: task.id, todoListId: todoId}),
         [task])
 
     return (

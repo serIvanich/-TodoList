@@ -18,7 +18,8 @@ const tasksReducer = tasksSlice.reducer
 export {
     tasksActions,
     todoListActions,
-    TodolistList,
     todoListsReducer,
     tasksReducer,
+    TodolistList,
+
 }
