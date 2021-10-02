@@ -3,11 +3,12 @@ import {AddItemFDormSubmitHelperType, AddItemForm} from "../../../components/Add
 import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import {Button, IconButton, PropTypes} from "@material-ui/core";
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import {useActions, useAppDispatch} from "../../../app/store";
-import {TasksStatuses, TasksType} from "../../../api/todolist-api";
 import {FilterValuesType, TodolistDomainType} from "../todolists-reducer";
 import Task from "./Task/Task";
 import {tasksActions, todoListActions} from "../index";
+import {useActions} from "../../../utils/redux-utils";
+import {useAppDispatch} from "../../../utils/types";
+import {TasksStatuses, TasksType} from "../../../api/types";
 
 
 type TodoListPropsType = {

@@ -1,4 +1,13 @@
 import axios from "axios"
+import {
+    AuthMeType,
+    GetTasksResponseType,
+    LoginRequestType,
+    ResponseType,
+    TasksType,
+    TodolistType,
+    UpdateTaskModelType
+} from "./types";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -8,21 +17,7 @@ const instance = axios.create({
     }
 })
 
-export type TodolistType = {
-    id: string
-    addedDate: string
-    order: number
-    title: string
-}
-export type FieldErrorType = { field: string, error: string }
-export type ResponseType<T = {}> = {
-    resultCode: number
-    messages: Array<string>
-    fieldsErrors?: Array<FieldErrorType>
-    data: T
 
-
-}
 export const todolistApi = {
     getTodo() {
         return instance.get<Array<TodolistType>>('todo-lists')
@@ -42,52 +37,9 @@ export const todolistApi = {
     }
 }
 
-export enum TasksStatuses {
-    New = 0,
-    InProgress = 1,
-    Completed = 2,
-    Draft = 3,
-}
-
-export enum TaskPriorities {
-    Low = 0,
-    Middle = 1,
-    Hi = 2,
-    Urgently = 3,
-    Later = 4
-}
-
-export type TasksType = {
-    description: string
-    title: string
-    completed: boolean
-    status: TasksStatuses
-    priority: TaskPriorities
-    startDate: string
-    deadline: string
-    id: string
-    todoListId: string
-    order: number
-    addedDate: string
-
-}
-type GetTasksResponseType = {
-    items: Array<TasksType>
-
-    totalCount: number
-
-    error: string | null
 
 
-}
-export type UpdateTaskModelType = {
-    title?: string
-    description?: string
-    status?: TasksStatuses
-    priority?: number
-    startDate?: string
-    deadline?: string
-}
+
 export const tasksApi = {
     getTasks(todoId: string) {
         return instance.get<GetTasksResponseType>(`/todo-lists/${todoId}/tasks`)
@@ -125,17 +77,3 @@ export const authApi = {
     }
 }
 
-export type AuthMeType = {
-    id: number
-    email: string
-    login: string
-
-
-}
-
-export type LoginRequestType = {
-    email: string
-    password: string
-    rememberMe: boolean
-    captcha?: string
-}

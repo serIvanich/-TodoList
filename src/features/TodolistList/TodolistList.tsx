@@ -3,13 +3,14 @@ import './../../app/App.css'
 
 import {AddItemFDormSubmitHelperType, AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Grid, Paper} from "@material-ui/core";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {TodoList} from './TodoList/TodoList';
 import {Redirect} from "react-router-dom";
 import {selectorTasks, selectorTodoLists} from "../../app/App";
 import {authSelectors} from "../auth";
-import {useActions, useAppDispatch} from "../../app/store";
-import {tasksActions, todoListActions} from "./index";
+import {todoListActions} from "./index";
+import {useActions} from "../../utils/redux-utils";
+import {useAppDispatch} from "../../utils/types";
 
 type PropsType = {
     demo?: boolean

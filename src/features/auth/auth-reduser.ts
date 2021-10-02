@@ -1,18 +1,20 @@
-import {setAppStatusAC} from '../../app/app-reducer'
-import {authApi, FieldErrorType, LoginRequestType} from "../../api/todolist-api";
+
+import {authApi} from "../../api/todolist-api";
 import {handleAsyncServerNetworkError, handleServerAppError} from "../../utils/error-utils";
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {appActions} from "../App";
+import {FieldErrorType, LoginRequestType} from "../../api/types";
 
 const loginTC = createAsyncThunk<undefined, LoginRequestType,
     { rejectValue: { errors: Array<string>, fieldsErrors?: Array<FieldErrorType> } }>
 ('auth/login', async (param, thunkAPI) => {
-    thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
+    thunkAPI.dispatch(appActions.setAppStatusAC({status: 'loading'}))
     try {
 
         const data = await authApi.login(param)
         if (data.resultCode === 0) {
 
-            thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
+            thunkAPI.dispatch(appActions.setAppStatusAC({status: 'succeeded'}))
             return
         } else {
 
@@ -29,10 +31,10 @@ const loginTC = createAsyncThunk<undefined, LoginRequestType,
 const logoutTC = createAsyncThunk
 ('auth/logout', async (param, thunkAPI) => {
     try {
-        thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
+        thunkAPI.dispatch(appActions.setAppStatusAC({status: 'loading'}))
         const data = await authApi.logout()
         if (data.resultCode === 0) {
-            thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'}))
+            thunkAPI.dispatch(appActions.setAppStatusAC({status: 'succeeded'}))
             return
         } else {
 

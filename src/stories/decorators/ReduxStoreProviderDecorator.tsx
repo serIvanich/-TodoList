@@ -9,7 +9,7 @@ import thunk from "redux-thunk";
 import {configureStore} from '@reduxjs/toolkit';
 import {HashRouter} from "react-router-dom";
 import {authReducer} from "../../features/auth";
-import {appReducer} from "../../app/app-reducer";
+import {appReducer} from "../../features/App";
 
 
 const rootReducer: RootReducerType = combineReducers({

@@ -1,7 +1,9 @@
-import {authApi} from "../api/todolist-api";
-import {setIsLoggedInAC} from "../features/auth/auth-reduser";
-import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {authApi} from "../../api/todolist-api";
+import {setIsLoggedInAC} from "../auth/auth-reduser";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {appActions} from "./index";
+
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
@@ -13,7 +15,7 @@ export type AppInitialStateType = {
 
 const initializeAppTC = createAsyncThunk
 ('app/initializeApp', async (param, {dispatch}) => {
-    dispatch(setAppStatusAC({status: 'loading'}))
+    dispatch(appActions.setAppStatusAC({status: 'loading'}))
     try {
         const data = await authApi.me()
         if (data.resultCode === 0) {
@@ -25,7 +27,7 @@ const initializeAppTC = createAsyncThunk
 
             handleServerAppError(data, dispatch)
         }
-        dispatch(setAppStatusAC({status: 'succeeded'}))
+        dispatch(appActions.setAppStatusAC({status: 'succeeded'}))
         return
     } catch (e) {
 
@@ -37,7 +39,7 @@ export const asyncActions = {
     initializeAppTC
 }
 
-const slice = createSlice({
+export const slice = createSlice({
     name: 'app',
     initialState: {
         status: 'succeeded',
@@ -62,9 +64,9 @@ const slice = createSlice({
     }
 })
 
-export const {setAppStatusAC, setAppErrorAC} = slice.actions
+export const { setAppErrorAC} = slice.actions
 
-export const appReducer = slice.reducer
+
 
 // export const appReducer = (state: AppInitialStateType = initialState, action: AppActionsType): AppInitialStateType => {
 //     switch (action.type) {

@@ -13,12 +13,11 @@ import {
 import {Menu} from "@material-ui/icons";
 import {TodolistList} from "../features/TodolistList";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "./store";
-import {asyncActions} from "./app-reducer";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
-import {authActions, authSelectors, Login} from "../features/auth";
 import {Redirect, Route, Switch} from 'react-router-dom';
-import {appSelectors} from "./index";
+import {appActions, appSelectors} from "../features/App";
+import {AppRootStateType} from "../utils/types";
+import {authActions, authSelectors, Login} from "../features/auth";
 
 
 type PropsType = {
@@ -45,7 +44,7 @@ const App: React.FC<PropsType> = ({demo = false}) => {
     useEffect(() => {
         if (!demo) {
 
-            dispatch(asyncActions.initializeAppTC())
+            dispatch(appActions.initializeAppTC())
         }
     }, [])
 

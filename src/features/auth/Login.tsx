@@ -2,10 +2,10 @@ import React from 'react'
 import {Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField} from '@material-ui/core'
 import {FormikHelpers, useFormik} from 'formik';
 import {useSelector} from "react-redux";
-import {useActions, useAppDispatch} from "../../app/store";
 import {Redirect} from "react-router-dom";
 import {selectorLoggedIn} from "./selectors";
 import {authActions} from "./index";
+import {useAppDispatch} from "../../utils/types";
 
 
 export const Login = () => {
