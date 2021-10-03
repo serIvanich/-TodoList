@@ -1,6 +1,6 @@
 import * as appSelectors from './selectors'
-import {slice, asyncActions} from './app-reducer'
-import {RequestStatusType as T1} from './app-reducer'
+import {slice, asyncActions} from './application-reducer'
+import {RequestStatusType as T1} from './types'
 
 const appReducer = slice.reducer
 const appActions = {

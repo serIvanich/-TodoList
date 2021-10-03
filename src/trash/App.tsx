@@ -1,5 +1,5 @@
 import React from 'react'
-// import './App.css'
+// import './application.css'
 // import {TodoList} from "./TodoList"
 // import {v1} from 'uuid'
 // import {AddItemForm} from "./AddItemForm";
@@ -21,7 +21,7 @@ import React from 'react'
 //     [key: string]: Array<TaskType>
 // }
 //
-// function App() {
+// function application() {
 //     //BLL
 //     const todoListID_1 = v1()
 //     const todoListID_2 = v1()
@@ -147,7 +147,7 @@ import React from 'react'
 //         )
 //     })
 //     return (
-//         <div className="App">
+//         <div className="application">
 //             <AppBar position={'static'}>
 //                 <Toolbar style={{justifyContent: 'space-between'}}>
 //                     <IconButton color={'inherit'}>
@@ -179,4 +179,4 @@ import React from 'react'
 // }
 //
 //
-// export default App
+// export default application

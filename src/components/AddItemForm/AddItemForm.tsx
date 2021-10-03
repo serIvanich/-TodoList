@@ -2,14 +2,14 @@ import React, {ChangeEvent, KeyboardEvent, useState} from 'react'
 import {IconButton, TextField} from "@material-ui/core";
 import {AddBox} from "@material-ui/icons";
 
-export type AddItemFDormSubmitHelperType = {
+export type AddItemFormSubmitHelperType = {
     setError: (error: string) => void,
     setTitle: (title: string) => void
 }
 
 export type AddItemFormPropsType = {
     addItem: (title: string,
-              helper: AddItemFDormSubmitHelperType) => Promise<void>
+              helper: AddItemFormSubmitHelperType) => Promise<void>
     disabled?: boolean
 }
 

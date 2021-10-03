@@ -15,9 +15,10 @@ import {TodolistList} from "../features/TodolistList";
 import {useDispatch, useSelector} from "react-redux";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {Redirect, Route, Switch} from 'react-router-dom';
-import {appActions, appSelectors} from "../features/App";
+import {appActions, appSelectors} from "../features/application";
 import {AppRootStateType} from "../utils/types";
 import {authActions, authSelectors, Login} from "../features/auth";
+import {useActions} from "../utils/redux-utils";
 
 
 type PropsType = {
@@ -27,10 +28,10 @@ type PropsType = {
 //selector all
 
 
-export const selectorTasks = (state: AppRootStateType) => state.tasks
-export const selectorTodoLists = (state: AppRootStateType) => {
-    return state.todoLists
-}
+// export const selectorTasks = (state: AppRootStateType) => state.tasks
+// export const selectorTodoLists = (state: AppRootStateType) => {
+//     return state.todoLists
+// }
 
 
 const App: React.FC<PropsType> = ({demo = false}) => {
@@ -39,61 +40,63 @@ const App: React.FC<PropsType> = ({demo = false}) => {
     const isInitialized = useSelector(appSelectors.selectorInitialized)
     const isLoggedIn = useSelector(authSelectors.selectorLoggedIn)
 
-    const dispatch = useDispatch()
+    const {logout} = useActions(authActions)
+    const {initializeApp} = useActions(appActions)
+
 
     useEffect(() => {
         if (!demo) {
 
-            dispatch(appActions.initializeAppTC())
+            initializeApp()
         }
     }, [])
 
     const logoutHandler = () => {
-        dispatch(authActions.logoutTC())
+        logout()
     }
     if (!isInitialized) {
         return <div
             style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
-            <CircularProgress />
+            <CircularProgress/>
         </div>
     }
 // const error = useSelector((state: AppRootStateType): string | null => state.app.error)
 
     return (
-            <div className="App">
-                <ErrorSnackbar/>
-                <AppBar position={'static'}>
-                    <Toolbar style={{justifyContent: 'space-between'}}>
-                        <IconButton color={'inherit'}>
-                            <Menu/>
+        <div className="App">
+            <ErrorSnackbar/>
+            <AppBar position={'static'}>
+                <Toolbar style={{justifyContent: 'space-between'}}>
+                    <IconButton color={'inherit'}>
+                        <Menu/>
 
-                        </IconButton>
-                        <Typography variant={'h5'}>
-                            Todolists
-                        </Typography>
-                        {isLoggedIn && <Button
-                            color={'inherit'}
-                            variant={"outlined"}
+                    </IconButton>
+                    <Typography variant={'h5'}>
+                        Todolists
+                    </Typography>
+                    {isLoggedIn && <Button
+                        color={'inherit'}
+                        variant={"outlined"}
                         onClick={logoutHandler}>
-                            Logout
-                        </Button>}
-                    </Toolbar>
-                    {status === "loading" && <LinearProgress color="secondary"/>}
-                </AppBar>
-                <Container fixed>
-                    <Switch>
-                        <Route exact path={'/'} render={() => <TodolistList demo={demo}/>}/>
-                        <Route path={'/login'} render={() => <Login/>}/>
-                        <Route path={'/404'} render={() => <h1 style={{
-                            'marginTop': '100px',
-                            'textAlign': 'center',
-                            'fontSize': '50px'
-                        }}>404 page not
-                            found</h1>}/>
-                         <Redirect from={'*'} to={'/'} />
-                    </Switch>
-                </Container>
-            </div>
+                        Logout
+                    </Button>}
+                </Toolbar>
+                {status === "loading" && <LinearProgress color="secondary"/>}
+            </AppBar>
+            <Container fixed>
+                <Switch>
+                    <Route exact path={'/'} render={() => <TodolistList demo={demo}/>}/>
+                    <Route path={'/login'} render={() => <Login/>}/>
+                    <Route path={'/404'} render={() => <h1 style={{
+                        'marginTop': '100px',
+                        'textAlign': 'center',
+                        'fontSize': '50px'
+                    }}>404 page not
+                        found</h1>}/>
+                    <Redirect from={'*'} to={'/'}/>
+                </Switch>
+            </Container>
+        </div>
     )
 }
 

@@ -3,11 +3,12 @@ import {
     changeTodoListFilter,
     FilterValuesType,
     TodolistDomainType,
-    todoListsReducer
+
 } from "./todolists-reducer";
 import {v1} from "uuid"
-import {RequestStatusType} from "../App/app-reducer";
-import {todoListActions} from "./index";
+
+import {todoListActions, todoListsReducer} from "./index";
+import {RequestStatusType} from "../application/types";
 
 
 let todoListId_1: string

@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect} from 'react'
 import './../../app/App.css'
-
-import {AddItemFDormSubmitHelperType, AddItemForm} from "../../components/AddItemForm/AddItemForm";
+import {AddItemFormSubmitHelperType, AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Grid, Paper} from "@material-ui/core";
 import {useSelector} from "react-redux";
 import {TodoList} from './TodoList/TodoList';
@@ -24,9 +23,8 @@ export const TodolistList: React.FC<PropsType> = ({demo = false}) => {
     const {fetchTodolist} = useActions(todoListActions)
     const dispatch = useAppDispatch()
 
-    const addTodolistCallback = useCallback(async(title: string, helper: AddItemFDormSubmitHelperType) => {
-        let thunk = todoListActions.addTodoList(title)
-        const resultAction = await dispatch(thunk)
+    const addTodolistCallback = useCallback(async(title: string, helper: AddItemFormSubmitHelperType) => {
+        const resultAction = await dispatch(todoListActions.addTodoList(title))
         if (todoListActions.addTodoList.rejected.match(resultAction )) {
             if (resultAction.payload?.errors?.length) {
                 const errorMessage = resultAction.payload.errors[0]
@@ -47,7 +45,7 @@ export const TodolistList: React.FC<PropsType> = ({demo = false}) => {
             return;
         }
 
-        fetchTodolist({})
+        fetchTodolist()
     }, [])
 
 

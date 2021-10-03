@@ -3,7 +3,7 @@ import App from "../app/App";
 import {ReduxStoreProviderDecorator} from "./decorators/ReduxStoreProviderDecorator";
 
 export default {
-    title: 'App Stories',
+    title: 'application Stories',
     component: App,
     decorators: [ReduxStoreProviderDecorator]
 }

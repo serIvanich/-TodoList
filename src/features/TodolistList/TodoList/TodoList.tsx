@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react'
-import {AddItemFDormSubmitHelperType, AddItemForm} from "../../../components/AddItemForm/AddItemForm";
+import {AddItemFormSubmitHelperType, AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import {Button, IconButton, PropTypes} from "@material-ui/core";
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
@@ -53,7 +53,7 @@ export const TodoList: React.FC<TodoListPropsType> = React.memo(({demo = false, 
     }, [removeTodoList, props.todoList.id])
 
 
-    const addTaskCallback = useCallback(async(title: string, helper: AddItemFDormSubmitHelperType) => {
+    const addTaskCallback = useCallback(async(title: string, helper: AddItemFormSubmitHelperType) => {
         let thunk = tasksActions.addTask({title: title, todoListId: props.todoList.id})
         const resultAction = await dispatch(thunk)
         if (tasksActions.addTask.rejected.match(resultAction )) {

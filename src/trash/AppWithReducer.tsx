@@ -1,5 +1,5 @@
 import React, {useReducer, useState} from 'react'
-// import './App.css'
+// import './application.css'
 // import {TodoList} from "./TodoList"
 // import {v1} from 'uuid'
 // import {AddItemForm} from "./AddItemForm";
@@ -150,7 +150,7 @@ import React, {useReducer, useState} from 'react'
 //         )
 //     })
 //     return (
-//         <div className="App">
+//         <div className="application">
 //             <AppBar position={'static'}>
 //                 <Toolbar style={{justifyContent: 'space-between'}}>
 //                     <IconButton color={'inherit'}>

@@ -1,10 +1,9 @@
 import {tasksReducer, todoListsReducer} from '../features/TodolistList';
 import {combineReducers} from 'redux';
 import thunk from 'redux-thunk';
-
 import {authReducer} from "../features/auth";
 import {configureStore} from '@reduxjs/toolkit';
-import {appReducer} from "../features/App";
+import {appReducer} from "../features/application";
 
 // объединяя reducer-ы с помощью combineReducers,
 // мы задаём структуру нашего единственного объекта-состояния
