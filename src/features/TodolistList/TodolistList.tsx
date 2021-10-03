@@ -1,15 +1,16 @@
 import React, {useCallback, useEffect} from 'react'
 import './../../app/App.css'
-import {AddItemFormSubmitHelperType, AddItemForm} from "../../components/AddItemForm/AddItemForm";
+import {AddItemForm, AddItemFormSubmitHelperType} from "../../components/AddItemForm/AddItemForm";
 import {Grid, Paper} from "@material-ui/core";
 import {useSelector} from "react-redux";
 import {TodoList} from './TodoList/TodoList';
 import {Redirect} from "react-router-dom";
-import {selectorTasks, selectorTodoLists} from "../../app/App";
-import {authSelectors} from "../auth";
 import {todoListActions} from "./index";
 import {useActions} from "../../utils/redux-utils";
-import {useAppDispatch} from "../../utils/types";
+import {AppRootStateType, useAppDispatch} from "../../utils/types";
+import {TodolistDomainType} from "./todolists-reducer";
+import {TasksStateType} from "./tasks-reducer";
+import {selectorLoggedIn} from "../auth/selectors";
 
 type PropsType = {
     demo?: boolean
@@ -17,15 +18,19 @@ type PropsType = {
 
 export const TodolistList: React.FC<PropsType> = ({demo = false}) => {
 
-    const tasks = useSelector(selectorTasks)
-    const todoLists = useSelector(selectorTodoLists)
-    const isLoggedIn = useSelector(authSelectors.selectorLoggedIn)
+    const tasks = useSelector<AppRootStateType, TasksStateType>(
+        (state) => state.tasks)
+    const todoLists = useSelector<AppRootStateType, Array<TodolistDomainType>>(
+        (state) => {
+            return state.todoLists
+        })
+    const isLoggedIn = useSelector(selectorLoggedIn)
     const {fetchTodolist} = useActions(todoListActions)
     const dispatch = useAppDispatch()
 
-    const addTodolistCallback = useCallback(async(title: string, helper: AddItemFormSubmitHelperType) => {
+    const addTodolistCallback = useCallback(async (title: string, helper: AddItemFormSubmitHelperType) => {
         const resultAction = await dispatch(todoListActions.addTodoList(title))
-        if (todoListActions.addTodoList.rejected.match(resultAction )) {
+        if (todoListActions.addTodoList.rejected.match(resultAction)) {
             if (resultAction.payload?.errors?.length) {
                 const errorMessage = resultAction.payload.errors[0]
                 helper.setError(errorMessage)
@@ -69,6 +74,7 @@ export const TodolistList: React.FC<PropsType> = ({demo = false}) => {
     })
 
     if (!isLoggedIn) {
+        debugger
         return <Redirect to={'/login'}/>
     }
 

@@ -8,12 +8,10 @@ import {appReducer} from "../features/application";
 // объединяя reducer-ы с помощью combineReducers,
 // мы задаём структуру нашего единственного объекта-состояния
 export const rootReducer = combineReducers({
-    tasks: tasksReducer,
-    todoLists: todoListsReducer,
     app: appReducer,
     auth: authReducer,
-
-
+    todoLists: todoListsReducer,
+    tasks: tasksReducer,
 })
 // непосредственно создаём state
 // export const store = createStore(rootReducer, applyMiddleware(thunk));

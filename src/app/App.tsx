@@ -28,10 +28,7 @@ type PropsType = {
 //selector all
 
 
-// export const selectorTasks = (state: AppRootStateType) => state.tasks
-// export const selectorTodoLists = (state: AppRootStateType) => {
-//     return state.todoLists
-// }
+
 
 
 const App: React.FC<PropsType> = ({demo = false}) => {

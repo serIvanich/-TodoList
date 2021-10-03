@@ -9,10 +9,8 @@ import {useAppDispatch} from "../../utils/types";
 
 
 export const Login = () => {
+
     const dispatch = useAppDispatch()
-
-
-
     const isLoggedIn = useSelector(selectorLoggedIn)
 
     const formik = useFormik({

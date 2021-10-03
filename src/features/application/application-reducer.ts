@@ -6,26 +6,21 @@ import {handleAsyncServerAppError, handleAsyncServerNetworkError} from "../../ut
 import {appActions} from "../common-action/App";
 
 
-
 const initializeApp = createAsyncThunk
 ('application/initializeApp', async (param, thunkAPI) => {
-    thunkAPI.dispatch(appActions.setAppStatus({status: 'loading'}))
-    try {
+
+
         const data = await authApi.me()
-        debugger
+
         if (data.resultCode === 0) {
-            debugger
+
             thunkAPI.dispatch(setIsLoggedIn({value: true}))
         } else {
 
-           return handleAsyncServerAppError(data, thunkAPI)
-        }
-        thunkAPI.dispatch(appActions.setAppStatus({status: 'succeeded'}))
-        return
-    } catch (e) {
 
-       return handleAsyncServerNetworkError(e.message, thunkAPI)
-    }
+        }
+
+
 })
 
 export const asyncActions = {
@@ -35,36 +30,24 @@ export const asyncActions = {
 export const slice = createSlice({
     name: 'app',
     initialState: {
-        status: 'succeeded',
+        status: 'idle',
         error: null,
         isInitialized: false
     } as AppInitialStateType,
-    reducers: {
-        // setAppStatusAC(state, action: PayloadAction<{ status: RequestStatusType }>) {
-        //     state.status = action.payload.status
-        // },
-        // setAppError(state, action: PayloadAction<{ error: string | null }>) {
-        //     state.error = action.payload.error
-        // },
-        // setIsInitializedAC(state, action: PayloadAction<{ value: boolean }>) {
-        //     state.isInitialized = action.payload.value
-        // },
-    },
+    reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(initializeApp.fulfilled, (state) => {
-            state.isInitialized = true
-        })
-        builder.addCase(appActions.setAppStatus, (state, action: PayloadAction<{ status: RequestStatusType }>) => {
-            state.status = action.payload.status
-        })
-        builder.addCase( appActions.setAppError,(state, action: PayloadAction<{ error: string | null }>) => {
-            state.error = action.payload.error
-        })
+        builder
+            .addCase(initializeApp.fulfilled, (state) => {
+                state.isInitialized = true
+            })
+            .addCase(appActions.setAppStatus, (state, action: PayloadAction<{ status: RequestStatusType }>) => {
+                state.status = action.payload.status
+            })
+            .addCase(appActions.setAppError, (state, action: PayloadAction<{ error: string | null }>) => {
+                state.error = action.payload.error
+            })
     }
 })
-
-
-
 
 
 // export const appReducer = (state: AppInitialStateType = initialState, action: AppActionsType): AppInitialStateType => {
@@ -84,7 +67,6 @@ export const slice = createSlice({
 // export const setAppStatusAC = (status: RequestStatusType) => ({type: 'APP/SET-STATUS', status} as const)
 // export const setAppErrorAC = (error: string | null) => ({type: 'APP/SET-ERROR', error} as const)
 // export const setIsInitializedAC = (isInitialized: boolean) => ({type: 'APP/SET-IS-INITIALIZED', isInitialized} as const)
-
 
 
 // thunk
@@ -115,3 +97,13 @@ export const slice = createSlice({
 
 // export type AppActionsType = SetAppStatusActionType | SetAppErrorActionType | SetIsInitializedAC
 
+
+// setAppStatusAC(state, action: PayloadAction<{ status: RequestStatusType }>) {
+//     state.status = action.payload.status
+// },
+// setAppError(state, action: PayloadAction<{ error: string | null }>) {
+//     state.error = action.payload.error
+// },
+// setIsInitializedAC(state, action: PayloadAction<{ value: boolean }>) {
+//     state.isInitialized = action.payload.value
+// },
