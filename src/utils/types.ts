@@ -1,7 +1,8 @@
-import {rootReducer, store} from '../app/store'
+import {store} from '../app/store'
 import {useDispatch} from "react-redux";
 import { FieldErrorType } from '../api/types';
 import {ThunkAction} from "redux-thunk";
+import {rootReducer} from "../app/reducers";
 
 //redux common types
 export type RootReducerType = typeof rootReducer

@@ -21,9 +21,6 @@ import {authActions, authSelectors, Login} from "../features/auth";
 import {useActions} from "../utils/redux-utils";
 
 
-type PropsType = {
-    demo?: boolean
-}
 
 //selector all
 
@@ -31,7 +28,7 @@ type PropsType = {
 
 
 
-const App: React.FC<PropsType> = ({demo = false}) => {
+const App: React.FC = () => {
 
     const status = useSelector(appSelectors.selectorStatus)
     const isInitialized = useSelector(appSelectors.selectorInitialized)
@@ -42,7 +39,7 @@ const App: React.FC<PropsType> = ({demo = false}) => {
 
 
     useEffect(() => {
-        if (!demo) {
+        if (!isInitialized) {
 
             initializeApp()
         }
@@ -62,7 +59,7 @@ const App: React.FC<PropsType> = ({demo = false}) => {
     return (
         <div className="App">
             <ErrorSnackbar/>
-            <AppBar position={'static'}>
+            <AppBar position={'static'} >
                 <Toolbar style={{justifyContent: 'space-between'}}>
                     <IconButton color={'inherit'}>
                         <Menu/>
@@ -82,7 +79,7 @@ const App: React.FC<PropsType> = ({demo = false}) => {
             </AppBar>
             <Container fixed>
                 <Switch>
-                    <Route exact path={'/'} render={() => <TodolistList demo={demo}/>}/>
+                    <Route exact path={'/'} render={() => <TodolistList demo={false}/>}/>
                     <Route path={'/login'} render={() => <Login/>}/>
                     <Route path={'/404'} render={() => <h1 style={{
                         'marginTop': '100px',

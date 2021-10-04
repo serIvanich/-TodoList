@@ -49,8 +49,10 @@ export const TodolistList: React.FC<PropsType> = ({demo = false}) => {
 
             return;
         }
+        if (!todoLists.length) {
 
-        fetchTodolist()
+            fetchTodolist()
+        }
     }, [])
 
 

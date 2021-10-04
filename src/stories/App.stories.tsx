@@ -8,5 +8,5 @@ export default {
     decorators: [ReduxStoreProviderDecorator]
 }
 export const AppBaseExample = (props: {demo: boolean}) => {
-    return (<App demo={true}/>)
+    return (<App />)
 }
