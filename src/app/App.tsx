@@ -12,20 +12,15 @@ import {
 } from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
 import {TodolistList} from "../features/TodolistList";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {Redirect, Route, Switch} from 'react-router-dom';
 import {appActions, appSelectors} from "../features/application";
-import {AppRootStateType} from "../utils/types";
 import {authActions, authSelectors, Login} from "../features/auth";
 import {useActions} from "../utils/redux-utils";
 
 
-
 //selector all
-
-
-
 
 
 const App: React.FC = () => {
@@ -59,7 +54,7 @@ const App: React.FC = () => {
     return (
         <div className="App">
             <ErrorSnackbar/>
-            <AppBar position={'static'} >
+            <AppBar position={'static'}>
                 <Toolbar style={{justifyContent: 'space-between'}}>
                     <IconButton color={'inherit'}>
                         <Menu/>
